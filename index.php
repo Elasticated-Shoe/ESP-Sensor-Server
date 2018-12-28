@@ -13,7 +13,8 @@ elseif($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo "GET";
 }
 else {
-    return 405; // HTTP code for method not allowed
+    http_response_code(405); // Return method not allowed if not POST or GET
+    die();
 }
 
 ?>
