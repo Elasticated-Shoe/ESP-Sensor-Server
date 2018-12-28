@@ -1,5 +1,5 @@
 <?php
 
-$config = parse_ini_file("/config.ini"); // settings defined in here
+$config = parse_ini_file("config.ini"); // settings defined in here
 
 ?>
