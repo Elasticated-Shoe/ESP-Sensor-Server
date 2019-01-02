@@ -1,7 +1,6 @@
 <?php
 
-$GLOBALS["config"] = parse_ini_file("../framework/config.ini"); // settings defined in here
-
+$GLOBALS["config"] =  parse_ini_file("../framework/config.ini"); // settings defined in here
 include('../framework/verifyPassword.php');
 include('../framework/failedLoginCooldown.php');
 
@@ -29,10 +28,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             http_response_code(403); // Return forbidden as password incorrect
             die();
         }
-        echo "Only the user has access to this part of the code";
-        // do stuff here
-        //
-        //
+        echo "Password Correct\n";
+        //echo json_decode($_POST["data"], TRUE);
+        $jsonString = $_POST["bacon"];
+        echo "\n";
+        echo print_r(json_decode($jsonString, TRUE)) . "\n";
+        foreach($_POST["data"] as $key => $value) {
+            echo $key . "\n";
+            echo $value . "\n\n";
+        }
     }
     else { // Should block http with apache and have this post stuff in seperate file?
         http_response_code(404);

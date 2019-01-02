@@ -44,7 +44,7 @@ for i in range(60):
     }
     print(data)
     r = requests.post("https://localhost/phplogin/index.php", 
-                        data={'password': password, 'user': 'jacob', "data": data}, 
+                        data={'password': password, 'user': 'jacob', "bacon": str(data)}, 
                         verify=False) # 200
     print(r.text)
     time.sleep(1)
