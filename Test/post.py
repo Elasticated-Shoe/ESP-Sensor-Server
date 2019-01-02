@@ -26,4 +26,11 @@ r = requests.post("https://localhost/phplogin/index.php",
                     verify=False) # 200
 print(r)
 print(r.text)
-print("Complete")
+print("Trying Incorrect Password Case")
+for i in range(7):
+    r = requests.post("https://localhost/phplogin/index.php", 
+                    data={'password': 'nvlalskn38', 'user': 'jacob'}, 
+                    verify=False) # 403 as password incorrect
+    print(r)
+    print(r.text)
+    print("Looping")
