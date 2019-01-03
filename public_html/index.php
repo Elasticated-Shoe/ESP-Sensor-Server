@@ -42,7 +42,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 // If GET request, serve the page
 elseif($_SERVER['REQUEST_METHOD'] === 'GET') {
-    echo "GET";
+    echo json_encode(fetchRecent());
 }
 else {
     http_response_code(405); // Return method not allowed if not POST or GET

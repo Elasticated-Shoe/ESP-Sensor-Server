@@ -1,4 +1,21 @@
 <?php
+    function fetchRecent() {
+        global $config;
+        // connect to database
+        $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["sensorsDatabase"]);
+        $fetchRecentReadings = $conn->prepare("SELECT sensor, reading, lastSeen FROM sensors.mostrecentdata;");
+        $fetchRecentReadings->execute();
+        $fetchRecentReadings->bind_result($sensor, $reading, $lastSeen);
+        // map data to array
+        while ($fetchRecentReadings->fetch()) {
+            $recentReadingResult[$sensor]["reading"] = $reading;
+            $recentReadingResult[$sensor]["lastSeen"] = $lastSeen;
+        }
+        // close connections
+        $fetchRecentReadings->close();
+        $conn->close();
+        return $recentReadingResult;
+    }
     function insertData() {
         global $config;
         // get time
