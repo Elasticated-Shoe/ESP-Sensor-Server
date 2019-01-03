@@ -1,8 +1,11 @@
 <?php
 
+// sensor data is sent as JSON string, I was having trouble sending it as JSON
+$_POST["data"] = json_decode($_POST["data"], TRUE);
 $GLOBALS["config"] =  parse_ini_file("../framework/config.ini"); // settings defined in here
 include('../framework/verifyPassword.php');
 include('../framework/failedLoginCooldown.php');
+include('../framework/CRUD_Data.php');
 
 // If POST request, check SSL, confirm login details and insert if okay
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -29,14 +32,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             die();
         }
         echo "Password Correct\n";
-        //echo json_decode($_POST["data"], TRUE);
-        $jsonString = $_POST["bacon"];
-        echo "\n";
-        echo print_r(json_decode($jsonString, TRUE)) . "\n";
-        foreach($_POST["data"] as $key => $value) {
-            echo $key . "\n";
-            echo $value . "\n\n";
-        }
+        // insert data
+        insertData();
     }
     else { // Should block http with apache and have this post stuff in seperate file?
         http_response_code(404);

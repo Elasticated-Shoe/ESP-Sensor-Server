@@ -3,6 +3,7 @@ import urllib3
 import time
 from random import randint
 import configparser
+import json
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -37,14 +38,14 @@ for i in range(60):
     if i == 34:
         test = 25
     data = {
-        "Pi": calcVal(23, "Pi", lastValues["Pi"]),
-        "Omicron": calcVal(30, "Omicron", lastValues["Omicron"]),
-        "Epsilon": calcVal(15, "Epsilon", lastValues["Epsilon"]),
-        "Lambda": calcVal(test, "Lambda", lastValues["Lambda"])
+        "Pi": {"value": calcVal(23, "Pi", lastValues["Pi"]), "time": int(time.time()) },
+        "Omicron": {"value": calcVal(29, "Omicron", lastValues["Omicron"]), "time": int(time.time()) },
+        "Epsilon": {"value": calcVal(19, "Epsilon", lastValues["Epsilon"]), "time": int(time.time()) },
+        "Lambda": {"value": calcVal(test, "Lambda", lastValues["Lambda"]), "time": int(time.time()) },
     }
-    print(data)
+    #print(data)
     r = requests.post("https://localhost/phplogin/index.php", 
-                        data={'password': password, 'user': 'jacob', "bacon": str(data)}, 
+                        data={'password': password, 'user': 'jacob', "data": json.dumps(data)},
                         verify=False) # 200
     print(r.text)
-    time.sleep(1)
+    time.sleep(5)
