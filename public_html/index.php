@@ -42,6 +42,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 // If GET request, serve the page
 elseif($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // see https://stackoverflow.com/questions/2279316/beginner-data-caching-in-php
     echo json_encode(fetchRecent());
 }
 else {
