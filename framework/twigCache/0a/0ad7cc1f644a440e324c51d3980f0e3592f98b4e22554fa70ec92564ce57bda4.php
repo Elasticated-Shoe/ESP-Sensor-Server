@@ -56,13 +56,17 @@ class __TwigTemplate_71b66b80b8032cc7dee04d24804a4945c0d17fe4ef50dea8225064d60b8
         <script src=\"assets/js/vendor/underscore.js\"></script>
         <script src=\"assets/js/vendor/fuse.js\"></script>
         <script src=\"assets/js/vendor/foundation.min.js\"></script>
+        <script src=\"assets/js/vendor/reactdev.js\"></script>
+        <script src=\"assets/js/vendor/reactdomdev.js\"></script>
+        <script src=\"assets/js/vendor/plotly-latest.min.js\"></script>
+        <script src=\"assets/js/vendor/plotly-component.js\"></script>
         <script src=\"assets/js/app.js\"></script>
         ";
-        // line 27
+        // line 31
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["scripts"] ?? null));
         foreach ($context['_seq'] as $context["_key"] => $context["script"]) {
-            // line 28
+            // line 32
             echo "            <script src=\"";
             echo twig_escape_filter($this->env, $context["script"], "html", null, true);
             echo "\"></script>
@@ -71,7 +75,7 @@ class __TwigTemplate_71b66b80b8032cc7dee04d24804a4945c0d17fe4ef50dea8225064d60b8
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['script'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 30
+        // line 34
         echo "        ";
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["templates"] ?? null));
@@ -89,7 +93,7 @@ class __TwigTemplate_71b66b80b8032cc7dee04d24804a4945c0d17fe4ef50dea8225064d60b8
             $context['loop']['last'] = 1 === $length;
         }
         foreach ($context['_seq'] as $context["_key"] => $context["template"]) {
-            // line 31
+            // line 35
             echo "            ";
             echo twig_include($this->env, $context, $context["template"]);
             echo "
@@ -106,7 +110,7 @@ class __TwigTemplate_71b66b80b8032cc7dee04d24804a4945c0d17fe4ef50dea8225064d60b8
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['template'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 33
+        // line 37
         echo "    </body>
 </html>";
     }
@@ -131,7 +135,7 @@ class __TwigTemplate_71b66b80b8032cc7dee04d24804a4945c0d17fe4ef50dea8225064d60b8
 
     public function getDebugInfo()
     {
-        return array (  118 => 13,  115 => 12,  110 => 33,  93 => 31,  75 => 30,  66 => 28,  62 => 27,  49 => 17,  45 => 15,  43 => 12,  37 => 9,  29 => 4,  24 => 1,);
+        return array (  122 => 13,  119 => 12,  114 => 37,  97 => 35,  79 => 34,  70 => 32,  66 => 31,  49 => 17,  45 => 15,  43 => 12,  37 => 9,  29 => 4,  24 => 1,);
     }
 
     public function getSourceContext()
