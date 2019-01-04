@@ -44,7 +44,7 @@ for i in range(60):
         "Lambda": {"value": calcVal(test, "Lambda", lastValues["Lambda"]), "time": int(time.time()) },
     }
     #print(data)
-    r = requests.post("https://localhost/phplogin/index.php", 
+    r = requests.post("https://localhost/phplogin/sensorAPI", 
                         data={'password': password, 'user': 'jacob', "data": json.dumps(data)},
                         verify=False) # 200
     print(r.text)
