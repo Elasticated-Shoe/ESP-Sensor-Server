@@ -1,5 +1,5 @@
 function fetchData() {
-    $.get(window.location.href + "sensorAPI", function(recentData) {
+    $.get(window.location.href + "sensorAPI?timePeriod=Current", function(recentData) {
         recentData = JSON.parse(recentData);
         renderFetchedData(recentData);
     });
