@@ -3,36 +3,46 @@
 {% block content %}
 	<div class="grid-container full">
         <div class="grid-x">
-            <div class="small-12">
-                <button class="button">Refresh List</button>
+            <div class="small-12 padding-small">
+                <button class="button">Test Button</button>
+                <button class="button">Test Button</button>
+                <button class="button">Test Button</button>
+                <button class="button">Test Button</button>
             </div>
             <div class="small-12 grid-x center-horizontally-parent">
-                <div class="small-3">
+                <div class="small-2">
                     <p>Name</p>
                 </div>
-                <div class="small-3">
+                <div class="small-2">
                     <p>Type</p>
                 </div>
-                <div class="small-3">
+                <div class="small-2">
                     <p>Location</p>
                 </div>
-                <div class="small-3">
+                <div class="small-2">
                     <p>Last Seen</p>
                 </div>
+                <div class="small-4">
+                    <p>Controls</p>
+                </div>
             </div>
-            {% for sensor in meta %}
-            <div class="small-12 grid-x">
-                <div class="small-3">
+            {% for sensor, value in meta %}
+            <div class="small-12 grid-x center-horizontally-parent">
+                <div class="small-2">
                     <p>{{ sensor }}</p>
                 </div>
-                <div class="small-3">
-                    <p>{{ sensor }}</p>
+                <div class="small-2">
+                    <p>{{ value.sensorType }}</p>
                 </div>
-                <div class="small-3">
-                    <p>{{ sensor }}</p>
+                <div class="small-2">
+                    <p>{{ value.sensorLocation }}</p>
                 </div>
-                <div class="small-3">
-                    <p>{{ sensor }}</p>
+                <div class="small-2">
+                    <p>{{ value.lastSeen }}</p>
+                </div>
+                <div class="small-2">
+                    <a href="">Edit</a>
+                    <a href="">Delete</a>
                 </div>
             </div>
             {% endfor %}

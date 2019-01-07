@@ -64,6 +64,9 @@ body, .body-grid {
 .footspace-4 {
     margin-bottom: 4em;
 }
+.padding-small {
+    padding: 5px;
+}
 .center-vertically-parent {
     display: flex;
     align-items: center;

@@ -70,6 +70,15 @@
         global $config;
         // connect to database
         $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["sensorsDatabase"]);
+        
+        $fetchDistinct = $conn->prepare("SELECT DISTINCT sensor, lastSeen FROM sensors.mostrecentdata;");
+        $fetchDistinct->execute();
+        $fetchDistinct->bind_result($sensor, $lastSeen);
+        // map data to array
+        while ($fetchDistinct->fetch()) {
+            $fetchMetaResult[$sensor]["lastSeen"] = $lastSeen;
+        }
+
         $fetchMeta = $conn->prepare("SELECT sensor, sensorType, sensorLocation FROM sensors.metadata;");
         $fetchMeta->execute();
         $fetchMeta->bind_result($sensor, $sensorLocation, $sensorLocation);

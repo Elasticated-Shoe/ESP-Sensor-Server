@@ -8,7 +8,7 @@ require('models/CRUD_Data.php');
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) {
         if(!isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] !== TRUE) {
-            // validate provided password
+            // validate provided password // should check if another user is already logged in?
             if(!validatePassword($_POST['password'])) {
                 http_response_code(400); // Return forbidden as supplied password is not a string or too long
                 die("Password Provided In Invalid Format");

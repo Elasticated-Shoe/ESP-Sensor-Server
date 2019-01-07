@@ -3,6 +3,7 @@
 require('models/verifyPassword.php');
 require('models/failedLoginCooldown.php');
 
+// should check if another user is already logged in?
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(!validatePassword($_POST['password'])) {
         http_response_code(400); // Return forbidden as supplied password is not a string or too long
