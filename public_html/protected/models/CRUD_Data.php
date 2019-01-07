@@ -16,6 +16,33 @@
         $conn->close();
         return $recentReadingResult;
     }
+    function fetchMeta() {
+        global $config;
+        // connect to database
+        $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["sensorsDatabase"]);
+        
+        $fetchDistinct = $conn->prepare("SELECT DISTINCT sensor, lastSeen FROM sensors.mostrecentdata;");
+        $fetchDistinct->execute();
+        $fetchDistinct->bind_result($sensor, $lastSeen);
+        // map data to array
+        while ($fetchDistinct->fetch()) {
+            $fetchMetaResult[$sensor]["lastSeen"] = $lastSeen;
+        }
+
+        $fetchMeta = $conn->prepare("SELECT sensor, sensorType, sensorLocation FROM sensors.metadata;");
+        $fetchMeta->execute();
+        $fetchMeta->bind_result($sensor, $sensorLocation, $sensorLocation);
+        // map data to array
+        while ($fetchMeta->fetch()) {
+            $fetchMetaResult[$sensor]["sensorType"] = $sensorLocation;
+            $fetchMetaResult[$sensor]["sensorLocation"] = $sensorLocation;
+        }
+        // close connections
+        $fetchMeta->close();
+        $fetchDistinct->close();
+        $conn->close();
+        return $fetchMetaResult;
+    }
     function insertData() {
         global $config;
         // get time
@@ -60,36 +87,22 @@
         $recentReadings->close();
         $conn->close();
     }
-    function dropColumn() {
-
-    }
-    function deleteOld() {
-
-    }
-    function fetchMeta() {
+    function dropColumn($sensorName) {
         global $config;
-        // connect to database
+    }
+    function removeRow($sensorName) {
+        global $config;
         $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["sensorsDatabase"]);
-        
-        $fetchDistinct = $conn->prepare("SELECT DISTINCT sensor, lastSeen FROM sensors.mostrecentdata;");
-        $fetchDistinct->execute();
-        $fetchDistinct->bind_result($sensor, $lastSeen);
-        // map data to array
-        while ($fetchDistinct->fetch()) {
-            $fetchMetaResult[$sensor]["lastSeen"] = $lastSeen;
-        }
-
-        $fetchMeta = $conn->prepare("SELECT sensor, sensorType, sensorLocation FROM sensors.metadata;");
-        $fetchMeta->execute();
-        $fetchMeta->bind_result($sensor, $sensorLocation, $sensorLocation);
-        // map data to array
-        while ($fetchMeta->fetch()) {
-            $fetchMetaResult[$sensor]["sensorType"] = $sensorLocation;
-            $fetchMetaResult[$sensor]["sensorLocation"] = $sensorLocation;
-        }
-        // close connections
-        $fetchMeta->close();
+        $query = $conn->prepare("DELETE FROM sensors.recentData WHERE sensor=?;");
+        $query->bind_param("s", $sensorName);
+        $query->execute();
+        $query->close();
         $conn->close();
-        return $fetchMetaResult;
+    }
+    function deleteOld($deleteBefore) {
+        global $config;
+    }
+    function editMeta($sensorName) {
+        global $config;
     }
 ?>

@@ -40,9 +40,9 @@
                 <div class="small-2">
                     <p>{{ value.lastSeen }}</p>
                 </div>
-                <div class="small-2">
-                    <a href="">Edit</a>
-                    <a href="">Delete</a>
+                <div class="small-2" data-sensor="{{ sensor }}">
+                    <button class="buttonEdit">Edit</button>
+                    <button class="buttonDelete">Delete</button>
                 </div>
             </div>
             {% endfor %}
