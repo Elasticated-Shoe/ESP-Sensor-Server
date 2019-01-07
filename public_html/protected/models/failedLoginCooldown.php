@@ -22,7 +22,7 @@ function getUserAttempts() {
     // check size of array, as usernames are unique there should only be one, otherwise their is a problem
     if(sizeof($loginAttemptsResult) !== 1) {
         http_response_code(403); // user not found / count incorrect
-        die();
+        die("User Not Found");
     }
     return $loginAttemptsResult;
 }

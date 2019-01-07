@@ -51,6 +51,7 @@ function verifyPassword($postedPass, $postedUser) {
     $sql->close();
     $conn->close();
     if(password_verify($pepperedPostedPass, $userHashes[0])) {
+        $_SESSION["loggedIn"] = TRUE;
         return TRUE;
     }
     return FALSE;
