@@ -1,0 +1,41 @@
+{% extends "layouts/base.twig" %}
+
+{% block content %}
+	<div class="grid-container full">
+        <div class="grid-x">
+            <div class="small-12">
+                <button class="button">Refresh List</button>
+            </div>
+            <div class="small-12 grid-x center-horizontally-parent">
+                <div class="small-3">
+                    <p>Name</p>
+                </div>
+                <div class="small-3">
+                    <p>Type</p>
+                </div>
+                <div class="small-3">
+                    <p>Location</p>
+                </div>
+                <div class="small-3">
+                    <p>Last Seen</p>
+                </div>
+            </div>
+            {% for sensor in meta %}
+            <div class="small-12 grid-x">
+                <div class="small-3">
+                    <p>{{ sensor }}</p>
+                </div>
+                <div class="small-3">
+                    <p>{{ sensor }}</p>
+                </div>
+                <div class="small-3">
+                    <p>{{ sensor }}</p>
+                </div>
+                <div class="small-3">
+                    <p>{{ sensor }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

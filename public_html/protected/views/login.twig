@@ -1,0 +1,19 @@
+{% extends "layouts/base.twig" %}
+
+{% block content %}
+    <div class="grid-container full">
+        <div class="grid-x">
+            <div class="small-offset-1 small-5 medium-offset-3 medium-6">
+                <form action="login" method="post">
+                    <label for="user"><b>Username</b></label>
+                    <input type="text" placeholder="Enter Username" name="user" required>
+
+                    <label for="password"><b>Password</b></label>
+                    <input type="password" placeholder="Enter Password" name="password" required>
+
+                    <button class="button" type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
