@@ -66,4 +66,21 @@
     function deleteOld() {
 
     }
+    function fetchMeta() {
+        global $config;
+        // connect to database
+        $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["sensorsDatabase"]);
+        $fetchMeta = $conn->prepare("SELECT sensor, sensorType, sensorLocation FROM sensors.metadata;");
+        $fetchMeta->execute();
+        $fetchMeta->bind_result($sensor, $sensorLocation, $sensorLocation);
+        // map data to array
+        while ($fetchMeta->fetch()) {
+            $fetchMetaResult[$sensor]["sensorType"] = $sensorLocation;
+            $fetchMetaResult[$sensor]["sensorLocation"] = $sensorLocation;
+        }
+        // close connections
+        $fetchMeta->close();
+        $conn->close();
+        return $fetchMetaResult;
+    }
 ?>

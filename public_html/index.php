@@ -21,8 +21,11 @@ switch ($request) {
     case $url . '/sensorAPI':
         require('protected/dataAPI.php');
         break;
-    case '':
-        echo $twig->render('sensorMetadata.twig', array( 'pageHead' => 'Sensors Metadata'));
+    case $url . '/login':
+        require('protected/handleLogin.php');
+        break;
+    case $url . '/sensorAdmin':
+        require('protected/sensorMetadata.php');
         break;
     default:
         echo $twig->render('404.twig', array(   'pageHead' => '404 Page Not Found'));
