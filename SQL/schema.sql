@@ -14,13 +14,9 @@ CREATE DATABASE sensors;
 CREATE TABLE sensors.mostRecentData (
     sensor varchar(255) NOT NULL,
     reading varchar(255),
+    sensorType varchar(255),
+    sensorLocation varchar(255),
     lastSeen int(11),
-    PRIMARY KEY (sensor)
-);
-CREATE TABLE sensors.metadata (
-    sensor varchar(255) NOT NULL,
-    sensorType varchar(255) NOT NULL,
-    sensorLocation varchar(255) NOT NULL,
     PRIMARY KEY (sensor)
 );
 CREATE TABLE sensors.allData (

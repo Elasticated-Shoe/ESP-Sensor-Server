@@ -3,45 +3,20 @@
         global $config;
         // connect to database
         $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["sensorsDatabase"]);
-        $fetchRecentReadings = $conn->prepare("SELECT sensor, reading, lastSeen FROM sensors.mostrecentdata;");
+        $fetchRecentReadings = $conn->prepare("SELECT sensor, reading, lastSeen, sensorType, sensorLocation FROM sensors.mostrecentdata;");
         $fetchRecentReadings->execute();
-        $fetchRecentReadings->bind_result($sensor, $reading, $lastSeen);
+        $fetchRecentReadings->bind_result($sensor, $reading, $lastSeen, $sensorType, $sensorLocation);
         // map data to array
         while ($fetchRecentReadings->fetch()) {
             $recentReadingResult[$sensor]["reading"] = $reading;
             $recentReadingResult[$sensor]["lastSeen"] = $lastSeen;
+            $recentReadingResult[$sensor]["sensorType"] = $sensorType;
+            $recentReadingResult[$sensor]["sensorLocation"] = $sensorLocation;
         }
         // close connections
         $fetchRecentReadings->close();
         $conn->close();
         return $recentReadingResult;
-    }
-    function fetchMeta() {
-        global $config;
-        // connect to database
-        $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["sensorsDatabase"]);
-        
-        $fetchDistinct = $conn->prepare("SELECT DISTINCT sensor, lastSeen FROM sensors.mostrecentdata;");
-        $fetchDistinct->execute();
-        $fetchDistinct->bind_result($sensor, $lastSeen);
-        // map data to array
-        while ($fetchDistinct->fetch()) {
-            $fetchMetaResult[$sensor]["lastSeen"] = $lastSeen;
-        }
-
-        $fetchMeta = $conn->prepare("SELECT sensor, sensorType, sensorLocation FROM sensors.metadata;");
-        $fetchMeta->execute();
-        $fetchMeta->bind_result($sensor, $sensorLocation, $sensorLocation);
-        // map data to array
-        while ($fetchMeta->fetch()) {
-            $fetchMetaResult[$sensor]["sensorType"] = $sensorLocation;
-            $fetchMetaResult[$sensor]["sensorLocation"] = $sensorLocation;
-        }
-        // close connections
-        $fetchMeta->close();
-        $fetchDistinct->close();
-        $conn->close();
-        return $fetchMetaResult;
     }
     function insertData() {
         global $config;

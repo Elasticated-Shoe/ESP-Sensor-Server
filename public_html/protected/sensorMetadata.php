@@ -35,7 +35,7 @@ if(isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] === TRUE) {
     // render if not post
     echo $twig->render('sensorMetadata.twig', array('pageHead' => 'Sensor Admin',
                                                     'scripts' => array("assets/js/handleMeta.js"),
-                                                    'meta' => fetchMeta()));
+                                                    'meta' => fetchRecent()));
 }
 else {
     header('Location: login');
