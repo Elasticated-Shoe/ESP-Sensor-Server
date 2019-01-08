@@ -3,11 +3,19 @@
 {% block content %}
 	<div class="grid-container full">
         <div class="grid-x">
-            <div class="small-12 padding-small">
-                <button class="button">Test Button</button>
-                <button class="button">Test Button</button>
-                <button class="button">Test Button</button>
-                <button class="button">Test Button</button>
+            <div class="small-12 medium-8 padding-small center-vertically-parent">
+                <div class="center-vertically-child">
+                    <button class="button">Test Button</button>
+                    <button class="button">Test Button</button>
+                    <button class="button">Test Button</button>
+                    <button class="button">Test Button</button>
+                </div>
+            </div>
+            <div class="small-12 medium-4 padding-small">
+                <input type="text" placeholder="Search...">
+                <input type="checkbox" class="searchMode" value="Name" checked>By Name
+                <input type="checkbox" class="searchMode" value="Type">By Type
+                <input type="checkbox" class="searchMode" value="Location">By Location
             </div>
             <div class="small-12 grid-x center-horizontally-parent">
                 <div class="small-2">
@@ -26,29 +34,30 @@
                     <p>Controls</p>
                 </div>
             </div>
-            {% for sensor, value in meta %}
             <div class="small-12 grid-x center-horizontally-parent">
-                <div class="small-2">
-                    <p>{{ sensor }}</p>
-                </div>
-                <div class="small-2">
-                    <p>{{ value.sensorType }}</p>
-                </div>
-                <div class="small-2">
-                    <p>{{ value.sensorLocation }}</p>
-                </div>
-                <div class="small-2">
-                    <p>{{ value.lastSeen }}</p>
-                </div>
-                <div class="small-4" data-sensor="{{ sensor }}">
-                    <button class="button buttonEdit">Edit</button>
-                    <button class="button buttonDelete">Delete</button>
-                </div>
+                {% for sensor, value in meta %}
+                    <div class="small-2">
+                        <p>{{ sensor }}</p>
+                    </div>
+                    <div class="small-2">
+                        <p>{{ value.sensorType }}</p>
+                    </div>
+                    <div class="small-2">
+                        <p>{{ value.sensorLocation }}</p>
+                    </div>
+                    <div class="small-2">
+                        <p>{{ value.lastSeen }}</p>
+                    </div>
+                    <div class="small-4" data-sensor="{{ sensor }}">
+                        <button class="button buttonEdit">Edit</button>
+                        <button class="button buttonDelete">Delete</button>
+                    </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
     <div class="reveal" id="modalEditButton" data-reveal>
+        <h1 id="titleEdit"><h1>
         <form id="formEdit" action="" onsubmit="return formValidateEdit();" method="post">
             <input type="text" name="Action" value="Edit" style="display: none;">
             <input id="setSensorVal2" type="text" name="Sensor" style="display: none;">
@@ -64,6 +73,7 @@
         </button>
     </div>
     <div class="reveal" id="modalDeleteButton" data-reveal>
+        <h1 id="titleDelete"><h1>
         <form id="formDelete" action="" onsubmit="return formValidateDelete();" method="post">
             <input type="text" name="Action" value="Delete" style="display: none;">
             <input id="setSensorVal" type="text" name="Sensor" style="display: none;">

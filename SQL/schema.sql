@@ -16,6 +16,7 @@ CREATE TABLE sensors.mostRecentData (
     reading varchar(255),
     sensorType varchar(255),
     sensorLocation varchar(255),
+    sensorVersion varchar(255),
     lastSeen int(11),
     PRIMARY KEY (sensor)
 );

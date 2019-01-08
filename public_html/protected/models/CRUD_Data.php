@@ -43,7 +43,7 @@
             $columnSQL = "ALTER TABLE sensors.alldata ADD COLUMN IF NOT EXISTS %s int(11);";
             $columnSQL = sprintf($columnSQL, $sensorName);
             $conn->query($columnSQL);
-            // insert time
+            // insert time // WARNING poor query ahead
             $archiveSQL = "INSERT INTO sensors.alldata (readingTimestamp) VALUES (%d) ON DUPLICATE KEY UPDATE readingTimestamp=%d;";
             $archiveSQL = sprintf($archiveSQL,
                 $severTime,
