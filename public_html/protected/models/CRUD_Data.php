@@ -74,7 +74,7 @@
     function removeRow($sensorName) {
         global $config;
         $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["sensorsDatabase"]);
-        $query = $conn->prepare("DELETE FROM sensors.mostrecentData WHERE sensor=?;");
+        $query = $conn->prepare("DELETE FROM sensors.mostrecentdata WHERE sensor=?;");
         $query->bind_param("s", $sensorName);
         $query->execute();
         $query->close();
@@ -89,7 +89,13 @@
         $query->close();
         $conn->close();
     }
-    function editMeta($sensorName) {
+    function editMeta($column, $value, $sensorName) {
         global $config;
+        $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["sensorsDatabase"]);
+        $query = $conn->prepare("UPDATE sensors.mostrecentdata SET " . $column . "=? WHERE sensor=?;");
+        $query->bind_param("ss", $value, $sensorName);
+        $query->execute();
+        $query->close();
+        $conn->close();
     }
 ?>

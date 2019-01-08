@@ -7,7 +7,14 @@ if(isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] === TRUE) {
     // if this is a form submission
     if(isset($_POST["Action"])) {
         if($_POST["Action"] === "Edit") {
-            echo "editing " . $_POST["Sensor"];
+            if(isset($_POST["Type"]) && isset($_POST["Location"])) {
+                if($_POST["Type"] !== "") {
+                    editMeta("sensorType", $_POST["Type"], $_POST["Sensor"]);
+                }
+                if($_POST["Location"] !== "") {
+                    editMeta("sensorLocation", $_POST["Location"], $_POST["Sensor"]);
+                }
+            }
         }
         elseif($_POST["Action"] === "Delete") {
             if(isset($_POST["Dash"])) {
@@ -26,7 +33,7 @@ if(isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] === TRUE) {
             }
         }
         else {
-            echo "Invalid Request";
+            die("Invalid Request");
         }
         // redirect user back to page and end connection
         header('Location: sensorAdmin');

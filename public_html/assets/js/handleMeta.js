@@ -1,4 +1,5 @@
 function formValidateDelete() {
+    // try catch so that if there are any errors we can return false and stop submission
     try {
         var formData = $("#formDelete").serializeArray();
         var mapFormData = [];
@@ -19,6 +20,9 @@ function formValidateDelete() {
         return false;
     }
 }
+function formValidateEdit() {
+    return true;
+}
 
 $(".historicalChecked").hide();
 $(document).ready(function(){
@@ -34,11 +38,12 @@ $(document).ready(function(){
 
     $(".buttonEdit").click(function() {
         var sensorName = $(this).parent().attr("data-sensor");
+        $("#setSensorVal2").val(sensorName);
         $("#modalEditButton").foundation('open');
     });
     $(".buttonDelete").click(function() {
         var sensorName = $(this).parent().attr("data-sensor");
-        $("#setSensorVal").val(sensorName)
+        $("#setSensorVal").val(sensorName);
         $("#modalDeleteButton").foundation('open');
     });
 });
