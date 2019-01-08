@@ -40,12 +40,37 @@
                 <div class="small-2">
                     <p>{{ value.lastSeen }}</p>
                 </div>
-                <div class="small-2" data-sensor="{{ sensor }}">
-                    <button class="buttonEdit">Edit</button>
-                    <button class="buttonDelete">Delete</button>
+                <div class="small-4" data-sensor="{{ sensor }}">
+                    <button class="button buttonEdit">Edit</button>
+                    <button class="button buttonDelete">Delete</button>
                 </div>
             </div>
             {% endfor %}
         </div>
+    </div>
+    <div class="reveal" id="modalEditButton" data-reveal>
+        <h1>Awesome. I Have It.</h1>
+        <p class="lead">Your couch. It is mine.</p>
+        <p>I'm a cool paragraph that lives inside of an even cooler modal. Wins!</p>
+
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="reveal" id="modalDeleteButton" data-reveal>
+        <form id="formDelete" action="" onsubmit="return formValidateDelete();" method="post">
+            <input type="text" name="Action" value="Delete" style="display: none;">
+            <input id="setSensorVal" type="text" name="Sensor" style="display: none;">
+            <input type="checkbox" name="Dash" value="Dash">Remove Sensor From Dashboard</br>
+            <input id="checkBoxHistorical" type="checkbox" name="Historical"="true">Delete Historical Data For Sensor</br>
+
+            <label class="historicalChecked" for="range"><b>Delete Data Before (Year/Month/Day 2018/02/18)</b></label>
+            <input class="historicalChecked" type="text" name="range">
+            <input class="historicalChecked" type="checkbox" name="Historical" value="All"><span class="historicalChecked">Remove All Historical Data For This Sensor</span></br>
+            <button class="button" type="submit">Submit</button>
+        </form>
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 {% endblock %}

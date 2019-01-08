@@ -2,29 +2,37 @@
 
 require('models/CRUD_Data.php');
 
-// of user logged in, get data and show the sensorsMetadata page, otherwise direct to login
+// if user logged in, get data and show the sensorsMetadata page, otherwise direct to login
 if(isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] === TRUE) {
-    if(isset($_GET["Action"])) {
-        if($_GET["Action"] === "Edit") {
-            echo "editing " . $_GET["Sensor"];
+    // if this is a form submission
+    if(isset($_POST["Action"])) {
+        if($_POST["Action"] === "Edit") {
+            echo "editing " . $_POST["Sensor"];
         }
-        elseif($_GET["Action"] === "Delete") {
-            removeRow($_GET["Sensor"]);
-            if(isset($_GET["Historical"])) {
-                if($_GET["Historical"] === "All") {
-                    // drop column
-                }
-                else {
-                    // remove records where date is earlier than provided
+        elseif($_POST["Action"] === "Delete") {
+            if(isset($_POST["Dash"])) {
+                if($_POST["Dash"] === "Dash") {
+                    removeRow($_POST["Sensor"]);
                 }
             }
-            echo true;
+            if(isset($_POST["Historical"])) {
+                if($_POST["Historical"] === "All") {
+                    echo $_POST["Historical"] . "\n";
+                    dropColumn($_POST["Sensor"]);
+                }
+                else {
+                    deleteOld($_POST["range"]);
+                }
+            }
         }
         else {
             echo "Invalid Request";
         }
+        // redirect user back to page and end connection
+        header('Location: sensorAdmin');
         die();
     }
+    // render if not post
     echo $twig->render('sensorMetadata.twig', array('pageHead' => 'Sensor Admin',
                                                     'scripts' => array("assets/js/handleMeta.js"),
                                                     'meta' => fetchMeta()));

@@ -89,11 +89,17 @@
     }
     function dropColumn($sensorName) {
         global $config;
+        $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["sensorsDatabase"]);
+        $sensorName = $conn->real_escape_string($sensorName);
+        $query = "ALTER TABLE sensors.alldata DROP COLUMN %s;";
+        $query = sprintf($query, $sensorName);
+        $conn->query($query);
+        $conn->close();
     }
     function removeRow($sensorName) {
         global $config;
         $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["sensorsDatabase"]);
-        $query = $conn->prepare("DELETE FROM sensors.recentData WHERE sensor=?;");
+        $query = $conn->prepare("DELETE FROM sensors.mostrecentData WHERE sensor=?;");
         $query->bind_param("s", $sensorName);
         $query->execute();
         $query->close();
@@ -101,6 +107,12 @@
     }
     function deleteOld($deleteBefore) {
         global $config;
+        $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["sensorsDatabase"]);
+        $query = $conn->prepare("DELETE FROM sensors.alldata WHERE readingTimestamp < ?;");
+        $query->bind_param("i", $deleteBefore);
+        $query->execute();
+        $query->close();
+        $conn->close();
     }
     function editMeta($sensorName) {
         global $config;
