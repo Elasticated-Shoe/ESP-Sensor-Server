@@ -8,15 +8,44 @@
         $fetchRecentReadings->bind_result($sensor, $reading, $lastSeen, $sensorType, $sensorLocation);
         // map data to array
         while ($fetchRecentReadings->fetch()) {
-            $recentReadingResult[$sensor]["reading"] = $reading;
-            $recentReadingResult[$sensor]["lastSeen"] = $lastSeen;
-            $recentReadingResult[$sensor]["sensorType"] = $sensorType;
-            $recentReadingResult[$sensor]["sensorLocation"] = $sensorLocation;
+            $recentReadingResult[$sensor]["reading"] = strip_tags($reading);
+            $recentReadingResult[$sensor]["lastSeen"] = strip_tags($lastSeen);
+            $recentReadingResult[$sensor]["sensorType"] = strip_tags($sensorType);
+            $recentReadingResult[$sensor]["sensorLocation"] = strip_tags($sensorLocation);
         }
         // close connections
         $fetchRecentReadings->close();
         $conn->close();
         return $recentReadingResult;
+    }
+    function fetchRange($sensorsArray, $start = null, $end = null) {
+        global $config;
+        // connect to database
+        $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["sensorsDatabase"]);
+        // escape sensors
+        $columnNames = $conn->real_escape_string(implode(",", $sensorsArray));
+        // escape daterange
+        $whereClause = "WHERE readingTimestamp < " . time() . " AND readingTimestamp > " . strtotime("midnight", time());
+        if($start !== null && $end !== null) {
+            $whereClause = "WHERE readingTimestamp < " . $end . " AND readingTimestamp > " . $start;
+            $whereClause = $conn->real_escape_string($whereClause);
+        }
+        // build query
+        $query = "SELECT readingTimestamp, %s FROM sensors.alldata %s;";
+        $query = sprintf($query, $columnNames, $whereClause);
+        // run query, map results
+        $result = $conn->query($query);
+        while($row = $result->fetch_assoc()) {
+            foreach($row as $key => $value) {
+                if($key !== "readingTimestamp") {
+                    // strip tags as you map values, is this how you do it?
+                    $ArchiveReadings[strip_tags($row["readingTimestamp"])][strip_tags($key)]["Reading"] = strip_tags($value);
+                }
+            }
+        }
+        // close connections
+        $conn->close();
+        return $ArchiveReadings;
     }
     function insertData() {
         global $config;

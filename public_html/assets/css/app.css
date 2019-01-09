@@ -27,6 +27,19 @@ body, .body-grid {
             min-height: 30px;
         }
 
+/* Sensor Display Elements */
+.selectable {
+    cursor: pointer;
+}
+.selected {
+    border: 4px solid orangered;
+    padding: 1px !important;
+}
+/* Graph Display Elements */
+.graph-input-container {
+    display: flex;
+    flex-direction: row;
+}
 
 /*  ====================================================================================
     ====================================================================================

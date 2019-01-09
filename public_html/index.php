@@ -14,7 +14,8 @@ $request = $_SERVER['REDIRECT_URL'];
 switch ($request) {
     case '':
         echo $twig->render('dashboard.twig', array( 'pageHead' => 'Dashboard',
-                                                    'scripts' => array("assets/js/displayRecent.js"),
+                                                    'scripts' => array("assets/js/displayRecent.js",
+                                                                        "assets/js/generateGraph.js"),
                                                     'templates' => array("partial/recentReadings.twig"),
                                                     ));
         break;

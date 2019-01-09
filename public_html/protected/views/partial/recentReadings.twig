@@ -1,7 +1,10 @@
 <script type="text/template" id="recentReadingsTemplate">
     <% for(sensor in data) { %>
-        <div class="small-6 medium-1 grid-x">
-            <p><%= sensor + ": " + data[sensor]['reading'] %></p>
+        <div    class="small-4 medium-1 padding-small <%= data[sensor]['selected'] %> selectable center-horizontally-parent center-vertically-parent"
+                data-name="<%= sensor %>"
+                data-type="<%= data[sensor]['sensorType'] %>"
+                data-location="<%= data[sensor]['sensorLocation'] %>">
+            <p class="center-vertically-child"><%= sensor + ": " + data[sensor]['reading'] %></p>
         </div>
     <% } %>
 </script>

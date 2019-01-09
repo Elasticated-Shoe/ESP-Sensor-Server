@@ -49,8 +49,12 @@ elseif($_SERVER['REQUEST_METHOD'] === 'GET') {
     if($_GET['timePeriod'] === "Current") {
         echo json_encode(fetchRecent());
     }
-    elseif($_GET['timePeriod'] === "Range") {
-        echo "Range";
+    elseif($_GET['timePeriod'] === "Past") {
+        if(isset($_GET["Start"]) && isset($_GET["End"])) {
+            echo json_encode(fetchRange($_GET["Sensors"], $_GET["Start"], $_GET["End"]));
+        } else {
+            echo json_encode(fetchRange($_GET["Sensors"]));
+        }
     }
     else {
         echo "Invalid Query String";
@@ -60,5 +64,6 @@ else {
     http_response_code(405); // Return method not allowed if not POST or GET
     die("Method Not Allowed");
 }
+die();
 
 ?>
