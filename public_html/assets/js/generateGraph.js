@@ -20,7 +20,7 @@ function validateSelectedSensors() {
         if(sensorType === undefined) {
             throw "Sensor Without Type Is Present, Please Set The Type In Admin Page";
         }
-        if(!(sensorType in sensorTypes)) {
+        if(!(sensorTypes.includes(sensorType))) {
             sensorTypes.push(sensorType);
         }
     });
@@ -30,7 +30,7 @@ function validateSelectedSensors() {
     return true;
 }
 
-function fetchArchivedData(sensors, start, end) {
+function fetchArchivedData(sensorTypes, sensors, start, end) {
     // for weak typed languages foo[]=value&foo[]value2 // to send an array in query string
     var sensorsQuery = "";
     for(sensor in sensors) {
@@ -46,10 +46,67 @@ function fetchArchivedData(sensors, start, end) {
     var archiveUrl = window.location.href + "sensorAPI?timePeriod=" + timePeriod + rangeQuery + sensorsQuery;
     $.get(archiveUrl, function(archiveData) {
         archiveData = JSON.parse(archiveData);
+        generateGraphFromData(sensors, sensorTypes, archiveData)
         $("#buttonGenerateGraph").prop('disabled', false);
-        
     });
 }
+
+function generateGraphFromData(sensors, sensorTypes, graphData) {
+    // https://plot.ly/javascript/multiple-axes/  plot.ly <3
+    // time only need to be generated once
+    sensorTimes = [];
+    for(sensorTime in graphData) {
+        sensorTimes.push(sensorTime);
+    }
+    // generate array of unique types
+    uniqueSensorTypes = [];
+    for(index = 0; index < sensorTypes.length; index++) {
+        if(!(uniqueSensorTypes.includes(sensorTypes[index]))) {
+            uniqueSensorTypes.push(sensorTypes[index]);
+        }
+    }
+    // generate y values for each, assign column and push to data array
+    var data = [];
+    for(index = 0; index < sensors.length; index++) {
+        xValues = [];
+        // get all values for this sensor in array
+        for(sensorTime in graphData) {
+            // E.G - graphData[12748393][Epsilon]["Reading"]
+            xValues.push(graphData[sensorTime][sensors[index]]["Reading"]);
+        }
+        temp = {};
+        temp["x"] = sensorTimes;
+        temp["y"] = xValues;
+        temp["name"] = sensors[index] + ' Data';
+        temp["type"] = "scatter";
+        yAxisIndex = uniqueSensorTypes.indexOf(sensorTypes[index]);
+        if(yAxisIndex !== 0) {
+            temp["yaxis"] = "y" + (yAxisIndex + 1);
+        }
+        data.push(temp);
+    }
+    // styling for the chart
+    var layout = {};
+    layout["title"] = sensors.join(", ") + "Sensor Data";
+    for(index = 0; index < uniqueSensorTypes.length; index++) {
+        yAxisIndex = index + 1;
+        if(yAxisIndex === 1) {
+            yAxisIndex = "";
+        }
+        yAxisIndex = "yaxis" + yAxisIndex;
+        layout[yAxisIndex] = {};
+        layout[yAxisIndex]["title"] = uniqueSensorTypes[index];
+        // other axis should go on the right
+        if(index !== 0) {
+            layout[yAxisIndex]["side"] = "right";
+            layout[yAxisIndex]["overlaying"] = 'y'; // important otherwise plots wont load
+        }
+    }
+    // generate chart
+    $('#graphContainer').html("");
+    Plotly.newPlot('graphContainer', data, layout);
+}
+
 $(document).ready(function() {
     $("#buttonGenerateGraph").click(function() {
         $(this).prop('disabled', true);
@@ -58,11 +115,14 @@ $(document).ready(function() {
             if(!validateSelectedSensors()) {
                 throw "Sensor Validation Failed";
             }
-            // generate array of selected sensor names
+            // generate array of selected sensor names and types
             sensorNames = [];
+            sensorTypes = [];
             $(".selected").each(function() {
                 var name = $(this).attr("data-name");
                 sensorNames.push(name);
+                var type = $(this).attr("data-type");
+                sensorTypes.push(type);
             });
             // if inputs are not empty and both convert to a timestamp
             if(!(convertToTimestamp("inputStartRange") === "" && convertToTimestamp("inputEndRange") === "") &&
@@ -71,11 +131,18 @@ $(document).ready(function() {
                 // should have more validation
                 throw "Invalid Parameter In Date Ranges";
             }
-            fetchArchivedData(sensorNames, convertToTimestamp("inputStartRange"), convertToTimestamp("inputEndRange"));
+            // show modal for graph
+            $("#modalShowGraph").foundation('open');
+            // get data (calls generateGraphFromData() when complete)
+            fetchArchivedData(sensorTypes, sensorNames, convertToTimestamp("inputStartRange"), convertToTimestamp("inputEndRange"));
         }
         catch (errorMessage) {
             alert(errorMessage);
             $(this).prop('disabled', false);
         }
-    })
+    });
+    // reset the modal to the loading thingy when it closes
+    $('#modalShowGraph').on('closed.zf.reveal', function() {
+        $('#graphContainer').html("<h1>Loading Graph...</h1>");
+    });
 });
