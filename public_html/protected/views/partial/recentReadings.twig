@@ -1,10 +1,48 @@
 <script type="text/template" id="recentReadingsTemplate">
-    <% for(sensor in data) { %>
-        <div    class="small-4 medium-1 padding-small <%= data[sensor]['selected'] %> selectable center-horizontally-parent center-vertically-parent"
-                data-name="<%= sensor %>"
-                data-type="<%= data[sensor]['sensorType'] %>"
-                data-location="<%= data[sensor]['sensorLocation'] %>">
-            <p class="center-vertically-child"><%= sensor + ": " + data[sensor]['reading'] %></p>
-        </div>
-    <% } %>
+    <% 
+        function findDistinctValues(data, key) {
+            tempArray = [];
+            for(item in data) {
+                var tempKeyValue = data[item][key];
+                if(!(tempArray.includes(tempKeyValue))) {
+                    tempArray.push(tempKeyValue);
+                }
+            }
+            return tempArray;
+        }
+        var sensorLocations = findDistinctValues(data, "sensorLocation");
+        var sensorTypes = findDistinctValues(data, "sensorType");
+        for(sensorLocation in sensorLocations) { %>
+        <div class="small-12"></div>
+        <div class="small-1 center-vertically-parent center-horizontally-parent"><p class="center-vertically-child"><%= sensorLocations[sensorLocation] %></p></div>
+        <div class="small-11"></div>
+        <% typeloop:
+            for(sensorType in sensorTypes) { %>
+            <% shouldContinue = false
+                for(sensor in data) {
+                    if(data[sensor]['sensorLocation'] === sensorLocations[sensorLocation] && data[sensor]['sensorType'] === sensorTypes[sensorType]) {
+                        shouldContinue = true;
+                        break;
+                    }
+                }
+                if(!shouldContinue) {
+                    continue;
+                }
+             %>
+            <div class="small-12"></div>
+            <div class="small-1 small-offset-1 center-vertically-parent center-horizontally-parent"><p class="center-vertically-child"><%= sensorTypes[sensorType] %></p></div>
+            <div class="small-10"></div>
+            <div class="small-1"></div>
+            <% for(sensor in data) {
+                if(data[sensor]['sensorLocation'] === sensorLocations[sensorLocation] && data[sensor]['sensorType'] === sensorTypes[sensorType]) { %>
+                    <div    class="small-4 medium-1 padding-small <%= data[sensor]['selected'] %> selectable center-horizontally-parent center-vertically-parent"
+                            data-name="<%= sensor %>"
+                            data-type="<%= data[sensor]['sensorType'] %>"
+                            data-location="<%= data[sensor]['sensorLocation'] %>">
+                        <p class="center-vertically-child"><%= sensor + ": " + data[sensor]['reading'] %></p>
+                    </div>
+                <% }
+            }
+        }
+    } %>
 </script>
