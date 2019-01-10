@@ -56,7 +56,8 @@ function generateGraphFromData(sensors, sensorTypes, graphData) {
     // time only need to be generated once
     sensorTimes = [];
     for(sensorTime in graphData) {
-        sensorTimes.push(sensorTime);
+        var date = new Date(sensorTime*1000);
+        sensorTimes.push(date.toDateString());
     }
     // generate array of unique types
     uniqueSensorTypes = [];
@@ -106,7 +107,6 @@ function generateGraphFromData(sensors, sensorTypes, graphData) {
     $('#graphContainer').html("");
     Plotly.newPlot('graphContainer', data, layout);
 }
-
 $(document).ready(function() {
     $("#buttonGenerateGraph").click(function() {
         $(this).prop('disabled', true);
