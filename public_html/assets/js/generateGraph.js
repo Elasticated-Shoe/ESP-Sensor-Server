@@ -144,5 +144,9 @@ $(document).ready(function() {
     // reset the modal to the loading thingy when it closes
     $('#modalShowGraph').on('closed.zf.reveal', function() {
         $('#graphContainer').html("<h1>Loading Graph...</h1>");
+        // clear selected
+        $(".selected").each(function() {
+            $(".selected").removeClass("selected");
+        });
     });
 });
