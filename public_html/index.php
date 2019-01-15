@@ -17,6 +17,7 @@ switch ($request) {
                                                     'scripts' => array("assets/js/displayRecent.js",
                                                                         "assets/js/generateGraph.js"),
                                                     'templates' => array("partial/recentReadings.twig"),
+                                                    'currentPage' => "Home",
                                                     ));
         break;
     case $url . '/sensorAPI':

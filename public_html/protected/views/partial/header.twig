@@ -1,5 +1,12 @@
+{% set navItems = [{"Name": "Home", "Link": "../"}, {"Name": "Admin Page", "Link": "sensorAdmin"}, {"Name": "Metcalfe's", "Link": "#"}] %}
 <div class="grid-container full" style="min-height: 20px; background-color: blue;">
     <div class="grid-x">
-        
+        <ul class="menu">
+            {% for item in navItems %}
+                <li {% if item['Name'] == currentPage %}class="is-active"{% endif %}>
+                    <a href="{{ item['Link'] }}">{{ item['Name'] }}</a>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
