@@ -42,6 +42,7 @@ if(isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] === TRUE) {
     // render if not post
     echo $twig->render('sensorMetadata.twig', array('pageHead' => 'Sensor Admin',
                                                     'scripts' => array("assets/js/handleMeta.js"),
+                                                    'templates' => array("partial/metadata.twig"),
                                                     'meta' => fetchRecent()));
 }
 else {

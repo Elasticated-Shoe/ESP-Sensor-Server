@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="small-12 medium-4 padding-small">
-                <input type="text" placeholder="Search...">
+                <input type="text" id="searchTerm" placeholder="Search...">
                 <input type="checkbox" class="searchMode" value="Name" checked>By Name
                 <input type="checkbox" class="searchMode" value="Type">By Type
                 <input type="checkbox" class="searchMode" value="Location">By Location
@@ -34,25 +34,8 @@
                     <p>Controls</p>
                 </div>
             </div>
-            <div class="small-12 grid-x center-horizontally-parent">
-                {% for sensor, value in meta %}
-                    <div class="small-2">
-                        <p>{{ sensor }}</p>
-                    </div>
-                    <div class="small-2">
-                        <p>{{ value.sensorType }}</p>
-                    </div>
-                    <div class="small-2">
-                        <p>{{ value.sensorLocation }}</p>
-                    </div>
-                    <div class="small-2">
-                        <p>{{ value.lastSeen }}</p>
-                    </div>
-                    <div class="small-4" data-sensor="{{ sensor }}">
-                        <button class="button buttonEdit">Edit</button>
-                        <button class="button buttonDelete">Delete</button>
-                    </div>
-                {% endfor %}
+            <div id="sensorsContainer" class="small-12 grid-x center-horizontally-parent">
+            
             </div>
         </div>
     </div>

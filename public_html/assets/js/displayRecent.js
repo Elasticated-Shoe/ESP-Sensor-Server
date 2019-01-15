@@ -86,6 +86,7 @@ function checkSelected() {
     });
     return selectedArray;
 }
+
 $(document).ready(function() {
     fetchData();
     setInterval(fetchData, 10000);
