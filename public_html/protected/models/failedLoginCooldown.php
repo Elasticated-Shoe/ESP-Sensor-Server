@@ -4,9 +4,9 @@ function getUserAttempts() {
     global $config;
     $theUser = $_POST['user'];
     // Create connection
-    $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["usersDatabase"]);
+    $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["database"]);
     // Check failed logins and times
-    $loginAttempts = $conn->prepare("SELECT username, lastFailedLogin, failedLoginsInWindow FROM login.users 
+    $loginAttempts = $conn->prepare("SELECT username, lastFailedLogin, failedLoginsInWindow FROM users 
                                     WHERE username = ?");
     $loginAttempts->bind_param("s", $theUser);
     $loginAttempts->execute();
@@ -46,8 +46,8 @@ function checkUserAttempts() {
                 return FALSE;
             }
             // otherwise the failed login attempts are old, they need to be updated
-            $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["usersDatabase"]);
-            $loginUnblock = $conn->prepare('UPDATE login.users SET lastFailedLogin = ?, 
+            $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["database"]);
+            $loginUnblock = $conn->prepare('UPDATE users SET lastFailedLogin = ?, 
                                                                     failedLoginsInWindow = ?
                                                                 WHERE username = ?');
             $loginUnblock->bind_param("sss", $SQLnull, $SQLnull, $theUser);
@@ -77,9 +77,9 @@ function incrementFailedCount() {
         $failedCount = (int)$failedCount + 1;
     }
     // connect to database
-    $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["usersDatabase"]);
+    $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["database"]);
     // update failed login attempts
-    $loginIncrementFailed = $conn->prepare("UPDATE login.users SET lastFailedLogin = ?, 
+    $loginIncrementFailed = $conn->prepare("UPDATE users SET lastFailedLogin = ?, 
                                                                 failedLoginsInWindow = ?
                                                             WHERE username = ?");
     $loginIncrementFailed->bind_param("iis", $unixTimestamp, $failedCount, $theUser);
