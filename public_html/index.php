@@ -2,14 +2,15 @@
 
 session_start();
 
-$GLOBALS["config"] =  parse_ini_file(__DIR__ . "/../framework/config.ini"); // settings defined in here
+$GLOBALS["config"] =  parse_ini_file(__DIR__ . "/protected/config.ini"); // settings defined in here
 $url = $config["proxy"];
 require_once '../framework/vendor/autoload.php';
 $loader = new Twig_Loader_Filesystem('protected/views');
 $twig = new Twig_Environment($loader, array(
     'cache' => '../framework/twigCache',
-)); // echo $twig->render('index.html', array('name' => 'Fabien'));
-$request = $_SERVER['REDIRECT_URL'];
+));
+// $_SERVER['REDIRECT_URL'] not available on some hosting
+$request = strtok($_SERVER["REQUEST_URI"],'?');
 // poor router but I won't be using more than a handful of routes
 switch ($request) {
     case '':
