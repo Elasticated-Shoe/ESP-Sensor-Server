@@ -3,7 +3,7 @@
         global $config;
         // connect to database
         $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["database"]);
-        $fetchRecentReadings = $conn->prepare("SELECT sensor, reading, lastSeen, sensorType, sensorLocation FROM mostrecentdata;");
+        $fetchRecentReadings = $conn->prepare("SELECT sensor, reading, lastSeen, sensorType, sensorLocation FROM mostRecentData;");
         $fetchRecentReadings->execute();
         $fetchRecentReadings->bind_result($sensor, $reading, $lastSeen, $sensorType, $sensorLocation);
         // map data to array
@@ -31,7 +31,7 @@
             $whereClause = $conn->real_escape_string($whereClause);
         }
         // build query
-        $query = "SELECT readingTimestamp, %s FROM alldata %s;";
+        $query = "SELECT readingTimestamp, %s FROM allData %s;";
         $query = sprintf($query, $columnNames, $whereClause);
         // run query, map results
         $result = $conn->query($query);
@@ -55,7 +55,7 @@
         // insert data supplied in post into the current sensor reading table
         $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["database"]);
         // prepare statement (updates if present, inserts if not)
-        $recentReadings = $conn->prepare("INSERT INTO mostrecentdata (sensor,reading,lastSeen) VALUES (?,?,?)
+        $recentReadings = $conn->prepare("INSERT INTO mostRecentData (sensor,reading,lastSeen) VALUES (?,?,?)
                                             ON DUPLICATE KEY UPDATE sensor=?,
                                                                     reading=?,
                                                                     lastSeen=?");
@@ -69,17 +69,17 @@
             // couldnt find the right sql to use in prepared statement so had to use query instead
             // insert column, errors and continues if already exists
             // i hate the following code
-            $columnSQL = "ALTER TABLE alldata ADD COLUMN IF NOT EXISTS %s int(11);";
+            $columnSQL = "ALTER TABLE allData ADD COLUMN IF NOT EXISTS %s int(11);";
             $columnSQL = sprintf($columnSQL, $sensorName);
             $conn->query($columnSQL);
             // insert time // WARNING poor query ahead
-            $archiveSQL = "INSERT INTO alldata (readingTimestamp) VALUES (%d) ON DUPLICATE KEY UPDATE readingTimestamp=%d;";
+            $archiveSQL = "INSERT INTO allData (readingTimestamp) VALUES (%d) ON DUPLICATE KEY UPDATE readingTimestamp=%d;";
             $archiveSQL = sprintf($archiveSQL,
                 $severTime,
                 $severTime);
             $conn->query($archiveSQL);
             // insert data for this sensor
-            $archiveSQL = "INSERT INTO alldata (readingTimestamp) VALUES (%d) ON DUPLICATE KEY UPDATE %s=%d;";
+            $archiveSQL = "INSERT INTO allData (readingTimestamp) VALUES (%d) ON DUPLICATE KEY UPDATE %s=%d;";
             $archiveSQL = sprintf($archiveSQL,
                 $severTime,
                 $sensorName,
@@ -95,7 +95,7 @@
         global $config;
         $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["database"]);
         $sensorName = $conn->real_escape_string($sensorName);
-        $query = "ALTER TABLE alldata DROP COLUMN %s;";
+        $query = "ALTER TABLE allData DROP COLUMN %s;";
         $query = sprintf($query, $sensorName);
         $conn->query($query);
         $conn->close();
@@ -103,7 +103,7 @@
     function removeRow($sensorName) {
         global $config;
         $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["database"]);
-        $query = $conn->prepare("DELETE FROM mostrecentdata WHERE sensor=?;");
+        $query = $conn->prepare("DELETE FROM mostRecentData WHERE sensor=?;");
         $query->bind_param("s", $sensorName);
         $query->execute();
         $query->close();
@@ -112,7 +112,7 @@
     function deleteOld($deleteBefore) {
         global $config;
         $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["database"]);
-        $query = $conn->prepare("DELETE FROM alldata WHERE readingTimestamp < ?;");
+        $query = $conn->prepare("DELETE FROM allData WHERE readingTimestamp < ?;");
         $query->bind_param("i", $deleteBefore);
         $query->execute();
         $query->close();
@@ -121,7 +121,7 @@
     function editMeta($column, $value, $sensorName) {
         global $config;
         $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["database"]);
-        $query = $conn->prepare("UPDATE mostrecentdata SET " . $column . "=? WHERE sensor=?;");
+        $query = $conn->prepare("UPDATE mostRecentData SET " . $column . "=? WHERE sensor=?;");
         $query->bind_param("ss", $value, $sensorName);
         $query->execute();
         $query->close();
