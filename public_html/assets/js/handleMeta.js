@@ -94,6 +94,9 @@ function refreshSearchJSON(initialLoad) {
     if(proxy.indexOf("/phplogin/") !== -1) {
         proxy = "/phplogin/";
     }
+    else {
+        proxy = "/"
+    }
     $.get(proxy + "sensorAPI?timePeriod=Current", function(recentData) {
         recentData = JSON.parse(recentData);
         searchArray = [];

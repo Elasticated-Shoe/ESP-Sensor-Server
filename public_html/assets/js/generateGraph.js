@@ -43,7 +43,14 @@ function fetchArchivedData(sensorTypes, sensors, start, end) {
     else {
         var rangeQuery = "&Start=" + start + "&End=" + end;
     }
-    var archiveUrl = window.location.href + "sensorAPI?timePeriod=" + timePeriod + rangeQuery + sensorsQuery;
+    proxy = window.location.href;
+    if(proxy.indexOf("/phplogin/") !== -1) {
+        proxy = "/phplogin/";
+    }
+    else {
+        proxy = "/"
+    }
+    var archiveUrl = proxy + "sensorAPI?timePeriod=" + timePeriod + rangeQuery + sensorsQuery;
     $.get(archiveUrl, function(archiveData) {
         archiveData = JSON.parse(archiveData);
         generateGraphFromData(sensors, sensorTypes, archiveData)
