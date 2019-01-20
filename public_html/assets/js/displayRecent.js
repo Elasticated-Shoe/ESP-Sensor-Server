@@ -90,4 +90,36 @@ function checkSelected() {
 $(document).ready(function() {
     fetchData();
     setInterval(fetchData, 10000);
+    var today = new Date();
+    var min = today.getHours();
+    var hour = today.getMinutes();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    if (min < 10) {
+        min = '0' + min;
+    }
+    if (hour < 10) {
+        hour = '0' + hour;
+    }
+    $('#inputStartRange').fdatepicker({
+        initialDate: yyyy + '-' + mm + '-' + dd + ' 00:00',
+		format: 'yyyy-mm-dd hh:ii',
+		disableDblClickSelection: true,
+        pickTime: true,
+        closeButton: true
+    });
+    $('#inputEndRange').fdatepicker({
+        initialDate: yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + min,
+		format: 'yyyy-mm-dd hh:ii',
+		disableDblClickSelection: true,
+        pickTime: true,
+        closeButton: true
+	});
 });
