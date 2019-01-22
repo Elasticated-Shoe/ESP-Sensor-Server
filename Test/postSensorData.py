@@ -8,7 +8,7 @@ import json
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 config = configparser.ConfigParser() # Initialise the config parser
-config.read("public_html/protected/config.ini") # Read the config file
+config.read("config.ini") # Read the config file
 config = config["settings"]
 password = config["applicationPassword"].replace('"', "")
 

@@ -13,7 +13,7 @@ $twig = new Twig_Environment($loader, array(
 $request = strtok($_SERVER["REQUEST_URI"],'?');
 // poor router but I won't be using more than a handful of routes
 switch ($request) {
-    case '':
+    case $url . '/':
         echo $twig->render('dashboard.twig', array( 'pageHead' => 'Dashboard',
                                                     'scripts' => array("assets/js/displayRecent.js",
                                                                         "assets/js/generateGraph.js"),

@@ -69,9 +69,14 @@
             // couldnt find the right sql to use in prepared statement so had to use query instead
             // insert column, errors and continues if already exists
             // i hate the following code
-            $columnSQL = "ALTER TABLE allData ADD COLUMN IF NOT EXISTS %s int(11);";
-            $columnSQL = sprintf($columnSQL, $sensorName);
-            $conn->query($columnSQL);
+            $checkColumnExists = $conn->prepare("SELECT TOP 10 %s FROM allData;");
+            $checkColumnExists = sprintf($checkColumnExists, $sensorName);
+            $conn->query($checkColumnExists);
+            if($checkColumnExists->num_rows < 1){
+                $AddColumnSQL = "ALTER TABLE allData ADD %s int(11);";
+                $AddColumnSQL = sprintf($AddColumnSQL, $sensorName);
+                $conn->query($AddColumnSQL);
+            }
             // insert time // WARNING poor query ahead
             $archiveSQL = "INSERT INTO allData (readingTimestamp) VALUES (%d) ON DUPLICATE KEY UPDATE readingTimestamp=%d;";
             $archiveSQL = sprintf($archiveSQL,
