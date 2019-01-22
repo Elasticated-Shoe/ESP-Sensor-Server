@@ -60,33 +60,39 @@
                                                                     reading=?,
                                                                     lastSeen=?");
         $recentReadings->bind_param("siisii", $sensorName, $sensorValue, $lastSeen, $sensorName, $sensorValue, $lastSeen);
+        // get list of column names in allData table
+        $allColumns = $conn->prepare("SHOW COLUMNS FROM allData;");
+        $allColumns->execute();
+        $allColumnsList = array();
+        $result = $allColumns->get_result();
+        while ($row = $result->fetch_array(MYSQLI_NUM))
+        {
+            if($row[0] !== "readingTimestamp") {
+                array_push($allColumnsList, $row[0]);
+            }
+        }
+        $allColumns->close();
         // loop over data and execute changes
         foreach($_POST["data"] as $sensorName => $sensorData) {
+            // escaped as i stopped using parameterised queries because i am an idiot
             $sensorName = $conn->real_escape_string($sensorName);
             $sensorValue = $conn->real_escape_string($sensorData["value"]);
             $lastSeen = $sensorData["time"]; // doesnt need to be escaped as only used in prepared statement
+            // add or update sensor entry in mostRecentData
             $recentReadings->execute();
-            // couldnt find the right sql to use in prepared statement so had to use query instead
-            // insert column, errors and continues if already exists
-            // i hate the following code
-            $checkColumnExists = $conn->prepare("SELECT TOP 10 %s FROM allData;");
-            $checkColumnExists = sprintf($checkColumnExists, $sensorName);
-            $conn->query($checkColumnExists);
-            if($checkColumnExists->num_rows < 1){
+            // if this column is not in the database, add it
+            if(!in_array($sensorName, $allColumns))
+            {
                 $AddColumnSQL = "ALTER TABLE allData ADD %s int(11);";
                 $AddColumnSQL = sprintf($AddColumnSQL, $sensorName);
                 $conn->query($AddColumnSQL);
             }
-            // insert time // WARNING poor query ahead
-            $archiveSQL = "INSERT INTO allData (readingTimestamp) VALUES (%d) ON DUPLICATE KEY UPDATE readingTimestamp=%d;";
+            // insert data for this sensor // if past time could be added as parameter could use to ammend old results
+            $archiveSQL = "INSERT INTO allData (readingTimestamp, %s) VALUES (%d, %d) ON DUPLICATE KEY UPDATE %s=%d;";
             $archiveSQL = sprintf($archiveSQL,
+                $sensorName,    
                 $severTime,
-                $severTime);
-            $conn->query($archiveSQL);
-            // insert data for this sensor
-            $archiveSQL = "INSERT INTO allData (readingTimestamp) VALUES (%d) ON DUPLICATE KEY UPDATE %s=%d;";
-            $archiveSQL = sprintf($archiveSQL,
-                $severTime,
+                $sensorValue,
                 $sensorName,
                 $sensorValue);
             $conn->query($archiveSQL);
