@@ -20,13 +20,17 @@
                         tempNameArray.push(tempName[p]);
                     }
                     var displayName = tempNameArray.join(" "); %>
-                    <div    class=" small-4 medium-1 selectable <%= theSensor['selected'] %>  
+                    <div    class=" small-4 medium-2 large-1 selectable <%= theSensor['selected'] %>  
                                     <%= theSensor['State'] %> padding-small 
                                     center-horizontally-parent center-vertically-parent"
                             data-name="<%= theSensor['Name'] %>"
                             data-type="<%= theSensor['sensorType'] %>"
                             data-location="<%= theSensor['sensorLocation'] %>">
-                        <p class="center-vertically-child"><%= displayName + ": " + theSensor['reading'] %></p>
+                        <div class="center-vertically-child">
+                            <p><%= displayName %></p>
+                            <p><%= theSensor['reading'] %></p>
+                        </div>
+                        <!-- <p class="center-vertically-child"><%= displayName + ": " + theSensor['reading'] %></p> -->
                     </div>
                 <% } %>
             </div>
