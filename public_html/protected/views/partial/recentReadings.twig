@@ -2,7 +2,14 @@
     <% 
     for(tempLocation in data) { %>
         <div class="small-12 sensor-location">
-            <div><p><%= tempLocation %></p></div>
+            <% var today = new Date();
+                var hour = today.getHours();
+                var min = today.getMinutes(); 
+                var seconds = today.getSeconds(); %>
+            <div>
+                <span><%= tempLocation %></span>
+                <span style="float: right;">Last Updated <%= hour + ":" + min + " " + seconds + "s" %></span>
+            </div>
         </div>
         <% for(tempType in data[tempLocation]) { %>
             <div class="small-12 sensor-type">
