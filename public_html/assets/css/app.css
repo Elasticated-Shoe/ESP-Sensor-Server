@@ -71,6 +71,8 @@ p {
     }
     .sensors-container div div p {
         text-transform: capitalize;
+        white-space: nowrap;
+        font-size: 11px;
     }
 /* Graph Display Elements */
 .graph-input-container {

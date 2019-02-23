@@ -5,7 +5,16 @@
             <% var today = new Date();
                 var hour = today.getHours();
                 var min = today.getMinutes(); 
-                var seconds = today.getSeconds(); %>
+                var seconds = today.getSeconds();
+                if (hour < 10) {
+                    hour = '0' + hour;
+                }
+                if (min < 10) {
+                    min = '0' + min;
+                }
+                if (seconds < 10) {
+                    seconds = '0' + seconds;
+                }%>
             <div>
                 <span><%= tempLocation %></span>
                 <span style="float: right;">Last Updated <%= hour + ":" + min + " " + seconds + "s" %></span>
