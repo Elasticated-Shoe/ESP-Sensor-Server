@@ -63,8 +63,7 @@ function generateGraphFromData(sensors, sensorTypes, graphData) {
     // time only need to be generated once
     sensorTimes = [];
     for(sensorTime in graphData) {
-        var date = new Date(sensorTime*1000);
-        sensorTimes.push(date.toDateString());
+        sensorTimes.push(new Date(sensorTime*1000));
     }
     // generate array of unique types
     uniqueSensorTypes = [];
@@ -80,7 +79,11 @@ function generateGraphFromData(sensors, sensorTypes, graphData) {
         // get all values for this sensor in array
         for(sensorTime in graphData) {
             // E.G - graphData[12748393][Epsilon]["Reading"]
-            xValues.push(graphData[sensorTime][sensors[index]]["Reading"]);
+            var checkIfInt = parseInt(graphData[sensorTime][sensors[index]]["Reading"]);
+            if(isNaN(checkIfInt)) {
+                checkIfInt = 0;
+            }
+            xValues.push(checkIfInt);
         }
         temp = {};
         temp["x"] = sensorTimes;

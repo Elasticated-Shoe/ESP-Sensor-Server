@@ -10,14 +10,23 @@
             </div>
             <div class="small-12 grid-x sensors-container">
                 <% for(tempSensor in data[tempLocation][tempType]) { 
-                    var theSensor = data[tempLocation][tempType][tempSensor]; %>
+                    var theSensor = data[tempLocation][tempType][tempSensor];
+                    var tempName = theSensor["Name"].split("_");
+                    var tempNameArray = [];
+                    for(var p = 0; p < tempName.length; p++) {
+                        if(p === 0 || p === 1) {
+                            continue;
+                        }
+                        tempNameArray.push(tempName[p]);
+                    }
+                    var displayName = tempNameArray.join(" "); %>
                     <div    class=" small-4 medium-1 selectable <%= theSensor['selected'] %>  
                                     <%= theSensor['State'] %> padding-small 
                                     center-horizontally-parent center-vertically-parent"
                             data-name="<%= theSensor['Name'] %>"
                             data-type="<%= theSensor['sensorType'] %>"
                             data-location="<%= theSensor['sensorLocation'] %>">
-                        <p class="center-vertically-child"><%= theSensor['Name'] + ": " + theSensor['reading'] %></p>
+                        <p class="center-vertically-child"><%= displayName + ": " + theSensor['reading'] %></p>
                     </div>
                 <% } %>
             </div>

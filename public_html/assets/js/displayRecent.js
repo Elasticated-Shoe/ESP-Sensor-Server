@@ -91,8 +91,8 @@ $(document).ready(function() {
     fetchData();
     setInterval(fetchData, 10000);
     var today = new Date();
-    var min = today.getHours();
-    var hour = today.getMinutes();
+    var hour = today.getHours();
+    var min = today.getMinutes();
     var dd = today.getDate();
     var mm = today.getMonth() + 1; //January is 0!
     var yyyy = today.getFullYear();
