@@ -17,7 +17,9 @@
                 }%>
             <div>
                 <span><%= tempLocation %></span>
-                <span style="float: right;">Last Updated <%= hour + ":" + min + " " + seconds + "s" %></span>
+                <% if(Object.keys(data)[0] === tempLocation) { %>
+                    <span style="float: right;">Last Updated <%= hour + ":" + min + " " + seconds + "s" %></span>
+                <% } %>
             </div>
         </div>
         <% for(tempType in data[tempLocation]) { %>
