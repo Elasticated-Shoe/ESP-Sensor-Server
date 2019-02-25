@@ -54,6 +54,7 @@ p {
 }
 .sensor-location {
     padding-left: 5px;
+    padding-right: 5px;
 }
 .sensor-location div p, .sensor-location div span, .sensor-type div p {
     margin: 0;
