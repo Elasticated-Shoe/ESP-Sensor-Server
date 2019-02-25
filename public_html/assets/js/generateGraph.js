@@ -79,7 +79,7 @@ function generateGraphFromData(sensors, sensorTypes, graphData) {
         // get all values for this sensor in array
         for(sensorTime in graphData) {
             // E.G - graphData[12748393][Epsilon]["Reading"]
-            var checkIfInt = parseInt(graphData[sensorTime][sensors[index]]["Reading"]);
+            var checkIfInt = parseFloat(graphData[sensorTime][sensors[index]]["Reading"]);
             if(isNaN(checkIfInt)) {
                 checkIfInt = 0;
             }
