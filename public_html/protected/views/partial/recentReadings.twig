@@ -37,7 +37,10 @@
                         }
                         tempNameArray.push(tempName[p]);
                     }
-                    var displayName = tempNameArray.join(" "); %>
+                    var displayName = tempNameArray.join(" ");
+                    if(tempNameArray.length === 0) {
+                        displayName = theSensor["Name"];
+                    } %>
                     <div    class=" small-4 medium-2 large-1 selectable <%= theSensor['selected'] %>  
                                     <%= theSensor['State'] %> padding-small 
                                     center-horizontally-parent center-vertically-parent"
