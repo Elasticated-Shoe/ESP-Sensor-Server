@@ -54,7 +54,7 @@ function fetchArchivedData(sensorTypes, sensors, start, end) {
     $.get(archiveUrl, function(archiveData) {
         archiveData = JSON.parse(archiveData);
         generateGraphFromData(sensors, sensorTypes, archiveData)
-        $("#buttonGenerateGraph").prop('disabled', false);
+        $(".graph-controls div div button").prop('disabled', false);
     });
 }
 
@@ -118,7 +118,7 @@ function generateGraphFromData(sensors, sensorTypes, graphData) {
     Plotly.newPlot('graphContainer', data, layout);
 }
 $(document).ready(function() {
-    $("#buttonGenerateGraph").click(function() {
+    $(".graph-controls div div button").click(function() {
         $(this).prop('disabled', true);
         try {
             // check that there are not too many types of sensor selected
