@@ -1,5 +1,7 @@
 function convertToTimestamp(elementID) {
     var timeToCheck = $("#" + elementID).val();
+    // Fixes invalid datetime on safari
+    timeToCheck = timeToCheck.replace(" ", "T");
     if(timeToCheck !== "") {
         var timeStamp = new Date(timeToCheck).getTime() / 1000;
         if(timeStamp === NaN) {
@@ -81,7 +83,8 @@ function generateGraphFromData(sensors, sensorTypes, graphData) {
             // E.G - graphData[12748393][Epsilon]["Reading"]
             var checkIfInt = parseFloat(graphData[sensorTime][sensors[index]]["Reading"]);
             if(isNaN(checkIfInt)) {
-                checkIfInt = 0;
+                //checkIfInt = 0;
+                checkIfInt = null;
             }
             xValues.push(checkIfInt);
         }

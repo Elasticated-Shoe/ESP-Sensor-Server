@@ -24,7 +24,7 @@ function renderFetchedData(data) {
             data[sensor]["selected"] = "selected";
         }
         // add class to identify sensor as active or inactive (if reading is no older than 30 seconds)
-        currentTimestamp = Math.round(new Date().getTime()/1000) - 32;
+        currentTimestamp = Math.round(new Date().getTime()/1000) - 36;
         data[sensor]["State"] = "sensor-inactive";
         if(data[sensor]["lastSeen"] >= currentTimestamp) {
             data[sensor]["State"] = "sensor-active";

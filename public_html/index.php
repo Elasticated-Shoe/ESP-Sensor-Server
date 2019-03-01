@@ -45,8 +45,8 @@ $request = strtok($_SERVER["REQUEST_URI"],'?');
 switch ($request) {
     case $url . '/':
         echo $twig->render('dashboard.twig', array( 'pageHead' => 'Dashboard',
-                                                    'scripts' => array("assets/js/displayRecent.js?version=2",
-                                                                        "assets/js/generateGraph.js?version=3"),
+                                                    'scripts' => array("assets/js/displayRecent.js?version=3",
+                                                                        "assets/js/generateGraph.js?version=4"),
                                                     'templates' => array("partial/recentReadings.twig"),
                                                     'currentPage' => "Home",
                                                     ));
