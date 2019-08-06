@@ -2,4 +2,4 @@ RewriteEngine On
 RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.+)$ phplogin/index.php [QSA,L]
+RewriteRule ^(.+)$ phplogin/index.html [QSA,L]

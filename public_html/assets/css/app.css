@@ -9,140 +9,38 @@ body, .body-grid {
 p {
     margin: 0;
 }
+
+/*  ====================================================================================
+    ====================================================================================
+                                CSS For Templates
+    ====================================================================================
+    ====================================================================================
+*/
+
 /*  ==================================================================================== */
-/*  Footer Classes                                                                      */
+/*  Page Structure Classes                                                               */
 /*  ==================================================================================== */
 
-.footer-container {
+#header-container {
+    
+}
+
+#footer-container {
     position: relative;
-    min-height: 70px;
+    min-height: 100px;
     width: 100%;
 }
     .footer-bottom-container {
         position: absolute;
         width: 100%;
         bottom: 0px;
-    }
-        .footer-index {
-            min-height: 70px;
-        }
-        .footer-copyright {
-            min-height: 30px;
-        }
-
-/*  ==================================================================================== */
-/*  nav Classes                                                                          */
-/*  ==================================================================================== */
-
-.menu li a {
-    color: white;
-}
-
-/*  ==================================================================================== */
-/*  Sensor Display Classes                                                               */
-/*  ==================================================================================== */
-
-/* Sensor Location Elements */
-.sensor-location {
-    padding-left: 5px;
-    padding-right: 5px;
-}
-    .sensor-location div p, .sensor-location div span, .sensor-type div p {
-        margin: 0;
-        font-weight: bold;
-    }
-/* Sensor Type Elements */
-.sensor-type {
-    padding-left: 15px;
-}
-/* Sensor Data Elements */
-.sensors-container {
-    padding-left: 25px;
-    padding-right: 25px;
-}
-    .sensors-container > div {
-        box-shadow: 2px 2px black;
-    }
-    .sensors-container div div p {
-        text-transform: capitalize;
-        white-space: nowrap;
-        font-size: 11px;
-    }
-    /* Sensor Selector Classes */
-    .selectable {
-        cursor: pointer;
-    }
-    .selected {
-        border: 4px solid black;
-        padding: 1px !important;
-    }
-    /* Sensor State */
-    .sensor-active {
-        background-color: lime;
-    }
-    .sensor-inactive {
-        background-color: orangered;
+        min-height: 100px;
     }
 
 /*  ==================================================================================== */
-/*  Graph Classes                                                                        */
+/*  Utility Classes                                                                      */
 /*  ==================================================================================== */
 
-/* Graph Input Elements */
-.graph-controls div div input:read-only {
-    cursor: pointer;
-    background-color: #fefefe;
-}
-    .graph-controls div div button {
-        height: 2.4375rem;
-        padding: 0;
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-
-/* Graph Data Container */
-#graphContainer {
-    margin-top: 32px;
-}
-
-/*  ====================================================================================
-    ====================================================================================
-                                Generic CSS For Elements
-    ====================================================================================
-    ====================================================================================
-*/
-
-/*  ==================================================================================== */
-/*  Utility Formating                                                                    */
-/*  ==================================================================================== */
-
-.headspace-1 {
-    margin-top: 1em;
-}
-.headspace-2 {
-    margin-top: 2em;
-}
-.headspace-3 {
-    margin-top: 3em;
-}
-.headspace-4 {
-    margin-top: 4em;
-}
-.footspace-1 {
-    margin-bottom: 1em;
-}
-.footspace-2 {
-    margin-bottom: 2em;
-}
-.footspace-3 {
-    margin-bottom: 3em;
-}
-.footspace-4 {
-    margin-bottom: 4em;
-}
-.padding-small {
-    padding: 5px;
-}
 .center-vertically-parent {
     display: flex;
     align-items: center;
@@ -153,10 +51,6 @@ p {
     .center-horizontally-parent .center-vertically-child {
         margin: auto;
     }
-.center-horizontally-parent, .center-horizontally-parent div {
+.center-horizontally-parent, .center-horizontally-parent th {
     text-align: center;
-}
-.fill-container {
-    height: 100%;
-    width: 100%;
 }
