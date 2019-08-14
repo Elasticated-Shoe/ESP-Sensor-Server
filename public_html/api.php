@@ -7,9 +7,6 @@
 
             $userSession = new SessionTracker();
             $userSession->init();
-            
-            echo print_r($_GET);
-            echo "<br>";
 
             if($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $apiAction = $_GET["action"];
@@ -36,7 +33,15 @@
             }
         }
         public static function autoloader($class) {
-            include 'protected/API Actions/' . $class . '.php';
+            $actionsDir = 'protected/API Actions/';
+            $directories = glob($actionsDir . '*' , GLOB_ONLYDIR);
+            foreach($directories as $dir) {
+                $classFile = $dir . "/" . $class . '.php';
+                if( file_exists($classFile) ) {
+                    include $classFile;
+                    break;
+                }
+            }
         }
     }
 
