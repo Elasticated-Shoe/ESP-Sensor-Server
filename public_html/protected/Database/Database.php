@@ -39,7 +39,7 @@
         }
         function recentReadings() {
             $conn = $this->conn;
-            $preparedQuery = $conn->prepare("SELECT sensor, reading, lastSeen, sensorType, sensorLocation FROM mostRecentData;");
+            $preparedQuery = $conn->prepare("SELECT sensor, reading, lastSeen, sensorType, sensorLocation FROM sensorMetadata;");
             $preparedQuery->execute();
             $preparedQuery->bind_result($sensor, $reading, $lastSeen, $sensorType, $sensorLocation);
             // map data to array
@@ -55,7 +55,7 @@
         }
         function archivedReadings($start, $finish, $sensorWhitelist) {
             $conn = $this->conn;
-            $allColumns = $this->showColumns("allData");
+            $allColumns = $this->showColumns("sensorData");
             array_push($sensorWhitelist, "readingTimestamp");
             $sensorBlacklist = array_diff($allColumns, $sensorWhitelist);
             $sensorWhitelist = array_diff($allColumns, $sensorBlacklist);
@@ -63,7 +63,7 @@
             // because second order sql attack is still possible
             $stringWhitelist = $conn->real_escape_string($stringWhitelist);
             $preparedQuery = $conn->prepare("SELECT " . $stringWhitelist
-                                            ." FROM allData WHERE readingTimestamp < ? AND readingTimestamp > ?;");
+                                            ." FROM sensorData WHERE readingTimestamp < ? AND readingTimestamp > ?;");
             $preparedQuery->bind_param("ii", $finish, $start);
             $preparedQuery->execute();
             // dynamic way of getting list of column names, for when we call bind_result
@@ -80,7 +80,7 @@
                     $result[$i][$k] = $v;
                 $i++;
             }
-            return $result;
+            return $result; // can be undefined if no data fix
         }
     }
 ?>
