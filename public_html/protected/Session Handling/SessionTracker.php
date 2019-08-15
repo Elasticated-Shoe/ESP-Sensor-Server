@@ -51,6 +51,12 @@
             if($requiredPermission === "Metadata") {
                 return true;
             }
+            if( isset($_SESSION["permissions"]) ) {
+                if( in_array( $requiredPermission, $_SESSION["permissions"] ) ) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 ?>
