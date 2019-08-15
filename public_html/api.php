@@ -19,8 +19,13 @@
                 die("Method Not Allowed");
             }
             if( class_exists($apiAction) ) {
-                $userAction = new $apiAction(false);
-                $userAction->init();
+                $userAction = new $apiAction();
+                if( $userSession->permission( $userAction->permission ) ) {
+                    $userAction->init();
+                }
+                else {
+                    $userAction->error = "Not Authorized For This Action";
+                }
                 $userAction->readyResponse();
                 echo $userAction->response;
             }
