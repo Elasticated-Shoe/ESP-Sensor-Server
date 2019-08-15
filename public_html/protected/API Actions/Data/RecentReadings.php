@@ -1,6 +1,5 @@
 <?php
-    require_once("protected/API Actions/BaseRequest.php"); // should be autoloader?
-    require_once("protected/Database/Database.php");
+    require_once("protected/API Actions/BaseRequest.php");
 
     class RecentReadings extends BaseRequest {
         public $permission = "Metadata";

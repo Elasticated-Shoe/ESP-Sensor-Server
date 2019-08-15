@@ -1,6 +1,5 @@
 <?php
     require_once("protected/API Actions/BaseRequest.php");
-    require_once("protected/Database/Database.php");
 
     class ArchivedReadings extends BaseRequest {
         public $permission = "Archive";

@@ -1,5 +1,5 @@
 <?php
-    require_once("protected/Database/Database.php");
+    include("protected/Database/Database.php");
 
     class SessionTracker {
         function init() {
