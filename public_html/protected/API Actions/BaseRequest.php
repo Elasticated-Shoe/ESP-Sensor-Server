@@ -3,10 +3,8 @@
         public function init();
     }
     abstract class BaseRequest implements apiInterface {
-        private $authorized;
-
-        function __construct($authorized) {
-            $this->authorized = $authorized;
+        function __construct() {
+            
         }
         function callInbuiltQuery($query, $columnsArray, $params = null) {
             $currentConnection = new Database("root", "", "localhost", "ESP_Project", null);

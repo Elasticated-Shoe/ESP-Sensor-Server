@@ -3,6 +3,8 @@
     require_once("protected/Database/Database.php");
 
     class RecentReadings extends BaseRequest {
+        public $permission = "Metadata";
+
         function init() {
             $this->callInbuiltQuery(
                 "SELECT sensor, reading, lastSeen, sensorType, sensorLocation FROM sensorMetadata;",

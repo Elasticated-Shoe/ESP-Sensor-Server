@@ -3,6 +3,8 @@
     require_once("protected/Database/Database.php");
 
     class ArchivedReadings extends BaseRequest {
+        public $permission = "Archive";
+
         function init() {
             $sensorWhitelist = $_GET["sensors"];
             array_push($sensorWhitelist, "readingTimestamp");
