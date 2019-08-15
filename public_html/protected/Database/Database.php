@@ -37,7 +37,7 @@
             }
             return $result;
         }
-        function runParameterizedQuery($query, $columnsArray, $params = null) {
+        function runParameterizedQuery($query, $columnsArray = null, $params = null) {
             $conn = $this->conn;
             $preparedQuery = $conn->prepare($query);
             if($params !== null) {
@@ -46,20 +46,22 @@
             }
             $preparedQuery->execute();
             // array of empty variables for bind_result to bind to
-            foreach($columnsArray as $columnName) {
-                $$columnName = null; 
-                $bindings[$columnName] =& $$columnName;
-            }
-            call_user_func_array( array($preparedQuery,'bind_result'), $bindings );
-            $result = array();
-            while( $preparedQuery->fetch() ) {
-                $row = array();
-                foreach($bindings as $columnName => $columnValue) {
-                    $row[$columnName] = $columnValue;
+            if($columnsArray !== null) {
+                foreach($columnsArray as $columnName) {
+                    $$columnName = null; 
+                    $bindings[$columnName] =& $$columnName;
                 }
-                array_push($result, $row);
+                call_user_func_array( array($preparedQuery,'bind_result'), $bindings );
+                $result = array();
+                while( $preparedQuery->fetch() ) {
+                    $row = array();
+                    foreach($bindings as $columnName => $columnValue) {
+                        $row[$columnName] = $columnValue;
+                    }
+                    array_push($result, $row);
+                }
+                return $result;
             }
-            return $result;
         }
         protected function getRefNotVal($arr) {
             $refs = array();
