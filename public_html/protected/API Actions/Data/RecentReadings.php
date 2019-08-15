@@ -2,7 +2,7 @@
     require_once("protected/API Actions/BaseRequest.php");
 
     class RecentReadings extends BaseRequest {
-        public $permission = "Metadata";
+        public $permission = "readMetadata";
 
         function init() {
             $this->callInbuiltQuery(

@@ -2,7 +2,7 @@
     require_once("protected/API Actions/BaseRequest.php");
 
     class ArchivedReadings extends BaseRequest {
-        public $permission = "Archive";
+        public $permission = "readArchive";
 
         function init() {
             $sensorWhitelist = $_GET["sensors"];
