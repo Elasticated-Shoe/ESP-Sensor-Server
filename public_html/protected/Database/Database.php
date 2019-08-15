@@ -37,50 +37,36 @@
             }
             return $result;
         }
-        function recentReadings() {
+        function runParameterizedQuery($query, $columnsArray, $params = null) {
             $conn = $this->conn;
-            $preparedQuery = $conn->prepare("SELECT sensor, reading, lastSeen, sensorType, sensorLocation FROM sensorMetadata;");
-            $preparedQuery->execute();
-            $preparedQuery->bind_result($sensor, $reading, $lastSeen, $sensorType, $sensorLocation);
-            // map data to array
-            while ($preparedQuery->fetch()) {
-                $result[$sensor]["reading"] = strip_tags($reading);
-                $result[$sensor]["lastSeen"] = strip_tags($lastSeen);
-                $result[$sensor]["sensorType"] = strip_tags($sensorType);
-                $result[$sensor]["sensorLocation"] = strip_tags($sensorLocation);
+            $preparedQuery = $conn->prepare($query);
+            if($params !== null) {
+                // mysqli_stmt_bind_param() requires parameters to be passed by reference not a val
+                call_user_func_array( array($preparedQuery,'bind_param'), $this->getRefNotVal($params) );
             }
-            // close connections
-            $preparedQuery->close();
+            $preparedQuery->execute();
+            // array of empty variables for bind_result to bind to
+            foreach($columnsArray as $columnName) {
+                $$columnName = null; 
+                $bindings[$columnName] =& $$columnName;
+            }
+            call_user_func_array( array($preparedQuery,'bind_result'), $bindings );
+            $result = array();
+            while( $preparedQuery->fetch() ) {
+                $row = array();
+                foreach($bindings as $columnName => $columnValue) {
+                    $row[$columnName] = $columnValue;
+                }
+                array_push($result, $row);
+            }
             return $result;
         }
-        function archivedReadings($start, $finish, $sensorWhitelist) {
-            $conn = $this->conn;
-            $allColumns = $this->showColumns("sensorData");
-            array_push($sensorWhitelist, "readingTimestamp");
-            $sensorBlacklist = array_diff($allColumns, $sensorWhitelist);
-            $sensorWhitelist = array_diff($allColumns, $sensorBlacklist);
-            $stringWhitelist = implode(", ", $sensorWhitelist);
-            // because second order sql attack is still possible
-            $stringWhitelist = $conn->real_escape_string($stringWhitelist);
-            $preparedQuery = $conn->prepare("SELECT " . $stringWhitelist
-                                            ." FROM sensorData WHERE readingTimestamp < ? AND readingTimestamp > ?;");
-            $preparedQuery->bind_param("ii", $finish, $start);
-            $preparedQuery->execute();
-            // dynamic way of getting list of column names, for when we call bind_result
-            foreach($sensorWhitelist as $columnName) {
-                $var = $columnName; 
-                $$var = null; 
-                $fields[$var] = &$$var;
+        protected function getRefNotVal($arr) {
+            $refs = array();
+            foreach($arr as $key => $value) {
+                $refs[$key] = &$arr[$key];
             }
-            call_user_func_array(array($preparedQuery,'bind_result'),$fields);
-            $i = 0;
-            while ($preparedQuery->fetch()) {
-                $result[$i] = array();
-                foreach($fields as $k => $v)
-                    $result[$i][$k] = $v;
-                $i++;
-            }
-            return $result; // can be undefined if no data fix
+            return $refs;
         }
     }
 ?>

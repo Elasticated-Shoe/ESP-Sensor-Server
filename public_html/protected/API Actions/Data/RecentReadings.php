@@ -5,8 +5,8 @@
     class RecentReadings extends BaseRequest {
         function init() {
             $this->callInbuiltQuery(
-                "recentReadings",
-                array()
+                "SELECT sensor, reading, lastSeen, sensorType, sensorLocation FROM sensorMetadata;",
+                array("sensor", "reading", "lastSeen", "sensorType", "sensorLocation")
             );
         }
     }

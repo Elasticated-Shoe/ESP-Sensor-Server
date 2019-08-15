@@ -8,11 +8,11 @@
         function __construct($authorized) {
             $this->authorized = $authorized;
         }
-        function callInbuiltQuery($function, $argArray) {
+        function callInbuiltQuery($query, $columnsArray, $params = null) {
             $currentConnection = new Database("root", "", "localhost", "ESP_Project", null);
             $Connected = $currentConnection->connect();
             if($Connected !== false) {
-                $this->data = call_user_func_array( array($currentConnection, $function), $argArray );
+                $this->data = $currentConnection->runParameterizedQuery($query, $columnsArray, $params);
             }
             else {
                 $this->error = "Connection To The Database Failed";
