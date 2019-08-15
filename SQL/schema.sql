@@ -7,19 +7,17 @@ CREATE TABLE users (
     isLocked INT(11),
     PRIMARY KEY (username)
 );
-CREATE TABLE userPermissions (
-    username VARCHAR(21) NOT NULL,
-    userPermission TINYINT NOT NULL
-);
 CREATE TABLE userFailedLogins (
     origin VARBINARY(16) NOT NULL,
     attemptTimestamp INT(11) NOT NULL
 );
-
-CREATE TABLE permissionTypes (
-    permissionId TINYINT NOT NULL,
-    permissionName VARCHAR(21),
-    PRIMARY KEY (permissionId)
+CREATE TABLE userPermissions (
+    username VARCHAR(21) NOT NULL,
+    readArchive BIT NOT NULL,
+    addPermission BIT NOT NULL,
+    createUser BIT NOT NULL,
+    loginUser BIT NOT NULL,
+    PRIMARY KEY (username)
 );
 
 CREATE TABLE eventLog (
