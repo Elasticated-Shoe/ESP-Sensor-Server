@@ -48,7 +48,7 @@
             else {
                 $this->error = "Connection To The Database Failed";
             }
-            if($requiredPermission === "readMetadata" || $requiredPermission === "loginUser") {
+            if($requiredPermission === "readMetadata" || $requiredPermission === "loginUser" || $requiredPermission === "readArchive") {
                 return true;
             }
             if( isset($_SESSION["permissions"]) ) {

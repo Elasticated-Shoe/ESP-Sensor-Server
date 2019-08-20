@@ -14,6 +14,10 @@ CREATE TABLE userFailedLogins (
 CREATE TABLE userPermissions (
     username VARCHAR(21) NOT NULL,
     readArchive BIT NOT NULL,
+    writeArchive BIT NOT NULL,
+    writeMeta BIT NOT NULL,
+    writeNotification BIT NOT NULL,    
+    readNotification BIT NOT NULL,    
     addPermission BIT NOT NULL,
     createUser BIT NOT NULL,
     loginUser BIT NOT NULL,
@@ -31,7 +35,9 @@ CREATE TABLE eventLog (
 );
 CREATE TABLE eventTypes (
     eventName VARCHAR(15) NOT NULL,
+    eventSensor VARCHAR(255) NOT NULL,
     eventAction VARCHAR(15) NOT NULL,
+    eventThreshold VARCHAR(15),
     PRIMARY KEY (eventName)
 );
 CREATE TABLE sensorMetadata (
