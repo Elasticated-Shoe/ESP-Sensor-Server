@@ -21,8 +21,10 @@
             }
             if( $this->isPassword($userProvidedName, $userProvidedPassword) ) {
                 $this->callInbuiltQuery(
-                    "SELECT readArchive, addPermission, createUser, loginUser FROM userpermissions WHERE username = ?;",
-                    array("readArchive", "addPermission", "createUser", "loginUser"),
+                    "SELECT readArchive, writeArchive, writeMeta, writeNotification, readNotification, 
+                        addPermission, createUser, loginUser FROM userpermissions WHERE username = ?;",
+                    array("readArchive", "writeArchive", "writeMeta", "writeNotification", "readNotification", 
+                            "addPermission", "createUser", "loginUser"),
                     array("s", $userProvidedName)
                 );
                 $permissionsDict = $this->data[0];
@@ -33,7 +35,7 @@
                     }
                 }
                 $_SESSION["permissions"] = $permissionsArray;
-                echo print_r($_SESSION);
+                //echo print_r($_SESSION);
             }
             else {
                 $this->incorrectAttempt($userProvidedName);
