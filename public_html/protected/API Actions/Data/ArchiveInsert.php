@@ -16,7 +16,6 @@
                 foreach($dataArray as $dataRow) {
                     foreach($dataRow as $key => $value) {
                         if(!in_array($key, $allColumns) ) {
-                            echo "\n" . "key: " . $key . "Does Not Exist\n";
                             $key = $currentConnection->conn->real_escape_string($key);
                             $addColumnQuery = sprintf($addColumnQueryBase, $key);
                             $currentConnection->runParameterizedQuery($addColumnQuery);
