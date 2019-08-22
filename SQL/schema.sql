@@ -27,7 +27,9 @@ CREATE TABLE userPermissions (
 CREATE TABLE eventLog (
     eventId INT(11) NOT NULL,
     eventName VARCHAR(15) NOT NULL,
+    eventSensor VARCHAR(255) NOT NULL,
     eventTimestamp INT(11) NOT NULL,
+    eventOngoing BIT NOT NULL,
     eventDesc VARCHAR(255) NOT NULL,
     userInformed BIT NOT NULL,
     userAck BIT NOT NULL,
