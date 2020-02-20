@@ -41,7 +41,21 @@
                 }
             }
         }
+        public static function errorHandler($error) {
+            http_response_code(500);
+
+            die(
+                json_encode(
+                    array (
+                        "Message" => $error->getMessage(),
+                        "File" => $error->getFile(),
+                        "Line" => $error->getLine()
+                    )
+                )
+            );
+        }
     }
+    set_exception_handler("Main::errorHandler");
 
     Main::init();
 ?>
