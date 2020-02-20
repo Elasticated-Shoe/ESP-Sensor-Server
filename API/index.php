@@ -71,5 +71,8 @@
     // set an exception handler for all uncaught errors
     set_exception_handler("Main::errorHandler");
 
+    $configFileContents = file_get_contents("config.json");
+    $GLOBALS["Config"] = json_decode($configFileContents, true);
+
     Main::init();
 ?>
