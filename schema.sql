@@ -1,61 +1,73 @@
 CREATE DATABASE ESP_Project;
 
 CREATE TABLE users (
-    username VARCHAR(21) NOT NULL,
+    userEmail VARCHAR(255) NOT NULL,
     userPass VARBINARY(255) NOT NULL,
-    userEmail VARCHAR(320) NOT NULL,
-    isLocked INT(11),
-    PRIMARY KEY (username)
+    isLocked BIT NOT NULL,
+
+    PRIMARY KEY (userEmail)
 );
 CREATE TABLE userFailedLogins (
-    origin VARBINARY(16) NOT NULL,
-    attemptTimestamp INT(11) NOT NULL
-);
-CREATE TABLE userPermissions (
-    username VARCHAR(21) NOT NULL,
-    readArchive BIT NOT NULL,
-    writeArchive BIT NOT NULL,
-    writeMeta BIT NOT NULL,
-    writeNotification BIT NOT NULL,    
-    readNotification BIT NOT NULL,    
-    addPermission BIT NOT NULL,
-    createUser BIT NOT NULL,
-    loginUser BIT NOT NULL,
-    PRIMARY KEY (username)
+    userEmail VARCHAR(255) NOT NULL,
+    attemptCount TINYINT NOT NULL,
+    attemptDatetime DATETIME NOT NULL,
+
+    FOREIGN KEY (userEmail) REFERENCES users(userEmail),
+    PRIMARY KEY (userEmail)
 );
 
+CREATE TABLE sensorMetadata (
+    sensorId INT NOT NULL AUTO_INCREMENT,
+    sensorName VARCHAR(255) NOT NULL,
+    sensorOwner VARCHAR(21) NOT NULL,
+    displayName VARCHAR(255) NOT NULL,
+    lastValue VARCHAR(255),
+    sensorType VARCHAR(255),
+    sensorUnits Varchar(255),
+    sensorLocation VARCHAR(255),
+    sensorVersion TINYINT,
+    lastSeen DATETIME,
+
+    FOREIGN KEY (sensorOwner) REFERENCES users(userEmail),
+    CONSTRAINT uniqueOwnerName UNIQUE (sensorName, sensorOwner),
+    INDEX (sensorOwner, sensorId),
+    INDEX (sensorOwner),
+    PRIMARY KEY (sensorId)
+);
+
+CREATE TABLE eventTypes (
+    eventId INT NOT NULL AUTO_INCREMENT,
+    eventOwner VARCHAR(255) NOT NULL,
+    eventName VARCHAR (30) NOT NULL,
+    eventSensor INT NOT NULL,
+    eventAction VARCHAR(15) NOT NULL,
+    eventData VARCHAR(255),
+
+    FOREIGN KEY (eventSensor) REFERENCES sensorMetadata(sensorId),
+    FOREIGN KEY (eventOwner) REFERENCES users(userEmail),
+    INDEX (eventOwner),
+    PRIMARY KEY (eventId)
+);
 CREATE TABLE eventLog (
-    eventId INT(11) NOT NULL,
+    eventId INT NOT NULL,
     eventName VARCHAR(15) NOT NULL,
-    eventSensor VARCHAR(255) NOT NULL,
-    eventTimestamp INT(11) NOT NULL,
+    eventSensor INT NOT NULL,
+    eventTime DATETIME NOT NULL,
     eventOngoing BIT NOT NULL,
     eventDesc VARCHAR(255) NOT NULL,
     userInformed BIT NOT NULL,
     userAck BIT NOT NULL,
-    PRIMARY KEY (eventId)
+
+    FOREIGN KEY (eventSensor) REFERENCES sensorMetadata(sensorId),
+    FOREIGN KEY (eventId) REFERENCES eventTypes(eventId),
+    INDEX (eventId, eventOngoing, eventTime)
 );
-CREATE TABLE eventTypes (
-    eventName VARCHAR(15) NOT NULL,
-    eventSensor VARCHAR(255) NOT NULL,
-    eventAction VARCHAR(15) NOT NULL,
-    eventThreshold VARCHAR(15),
-    PRIMARY KEY (eventName)
-);
-CREATE TABLE sensorMetadata (
-    sensor VARCHAR(255) NOT NULL,
-    reading VARCHAR(255),
-    sensorType VARCHAR(255),
-    sensorLocation VARCHAR(255),
-    sensorVersion TINYINT,
-    lastSeen INT(11),
-    PRIMARY KEY (sensor)
-);
+
 CREATE TABLE sensorData (
-    readingTimestamp INT(11) NOT NULL,
-    PRIMARY KEY (readingTimestamp)
-);
-CREATE TABLE sensorUptime (
-    dayTimestamp INT(11) NOT NULL,
-    PRIMARY KEY (dayTimestamp)
-)
+    sensorId INT NOT NULL,
+    sensorDatetime DATETIME NOT NULL,
+    sensorValue VARCHAR(255) NOT NULL,
+
+    FOREIGN KEY (sensorId) REFERENCES sensorMetadata(sensorId),
+    INDEX (sensorId, sensorDatetime)
+) ROW_FORMAT=COMPRESSED;
