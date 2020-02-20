@@ -8,12 +8,19 @@
             $userSession = new SessionTracker();
             $userSession->init();
 
-            if($_SERVER['REQUEST_METHOD'] === 'GET') {
+            if( isset($_GET["action"]) ) {
                 $apiAction = $_GET["action"];
             }
             else {
-                http_response_code(405); // Return method not allowed if not POST or GET
-                die("Method Not Allowed");
+                http_response_code(400); // no API action has been defined
+
+                die(
+                    json_encode(
+                        array (
+                            "Message" => "No Action Has Been Defined In The Query String"
+                        )
+                    )
+                );
             }
             if( class_exists($apiAction) ) {
                 $userAction = new $apiAction();
@@ -23,9 +30,13 @@
                 echo $userAction->response;
             }
             else {
-                echo json_encode(
-                    array(
-                        "error" => "Action Not Found"
+                http_response_code(400); // an invalid API action has been defined
+
+                die(
+                    json_encode(
+                        array (
+                            "Message" => "Action Has Not Been Found"
+                        )
                     )
                 );
             }
@@ -55,6 +66,9 @@
             );
         }
     }
+    // disable notices
+    error_reporting(0);
+    // set an exception handler for all uncaught errors
     set_exception_handler("Main::errorHandler");
 
     Main::init();
