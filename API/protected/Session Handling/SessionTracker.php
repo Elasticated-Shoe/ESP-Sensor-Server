@@ -1,6 +1,4 @@
 <?php
-    include("protected/Database/Database.php");
-
     class SessionTracker {
         function init() {
             // https://stackoverflow.com/questions/22221807/session-cookies-http-secure-flag-how-do-you-set-these
@@ -32,31 +30,6 @@
                 return true;
             }
             return true;
-        }
-        function permission( $requiredPermission ) {
-            $currentConnection = new Database("root", "", "localhost", "ESP_Project", null);
-            $Connected = $currentConnection->connect();
-            if($Connected !== false) {
-                $rowCounts = $currentConnection->runParameterizedQuery(
-                    "SELECT COUNT(username) FROM users;", 
-                    array("username")
-                );
-                if( $rowCounts[0]["username"] === 0 ) {
-                    return true; // permissions are ignored if there are no users
-                }
-            }
-            else {
-                $this->error = "Connection To The Database Failed";
-            }
-            if($requiredPermission === "readMetadata" || $requiredPermission === "loginUser" || $requiredPermission === "readArchive") {
-                return true;
-            }
-            if( isset($_SESSION["permissions"]) ) {
-                if( in_array( $requiredPermission, $_SESSION["permissions"] ) ) {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 ?>

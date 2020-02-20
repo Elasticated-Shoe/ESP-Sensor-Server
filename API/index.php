@@ -11,21 +11,14 @@
             if($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $apiAction = $_GET["action"];
             }
-            elseif($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $apiAction = $_POST["action"];
-            }
             else {
                 http_response_code(405); // Return method not allowed if not POST or GET
                 die("Method Not Allowed");
             }
             if( class_exists($apiAction) ) {
                 $userAction = new $apiAction();
-                if( $userSession->permission( $userAction->permission ) ) {
-                    $userAction->init();
-                }
-                else {
-                    $userAction->error = "Not Authorized For This Action";
-                }
+                $userAction->init();
+
                 $userAction->readyResponse();
                 echo $userAction->response;
             }
