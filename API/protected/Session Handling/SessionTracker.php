@@ -1,15 +1,15 @@
 <?php
     class SessionTracker {
         function init() {
-            // https://stackoverflow.com/questions/22221807/session-cookies-http-secure-flag-how-do-you-set-these
-            ini_set('session.cookie_httponly', 1); // prevents JavaScript XSS attacks stealing cookie
-            ini_set('session.use_only_cookies', 1); // stops session ID being passed in URL
-            ini_set('session.cookie_secure', 1); // HTTPS only
-            ini_set('session.cookie_lifetime', 0); // cookie expires at end of browser session
-            // ini_set("session.cookie_domain", "www.example.com"); // cookie only sent on subdomain
-            session_start(); // start or resume new session with cookie
-            // log session creation time so we can work out session age
-            if(!isset( $_SESSION["sessionStart"] )) {
+            if(!isset($_SESSION)) {
+                // https://stackoverflow.com/questions/22221807/session-cookies-http-secure-flag-how-do-you-set-these
+                ini_set('session.cookie_httponly', 1); // prevents JavaScript XSS attacks stealing cookie
+                ini_set('session.use_only_cookies', 1); // stops session ID being passed in URL
+                ini_set('session.cookie_secure', 1); // HTTPS only
+                ini_set('session.cookie_lifetime', 0); // cookie expires at end of browser session
+                // ini_set("session.cookie_domain", "www.example.com"); // cookie only sent on subdomain
+                session_start(); // start or resume new session with cookie
+                // log session creation time so we can work out session age
                 $_SESSION["sessionStart"] = time();
             }
             if($this->hasExpired() == false) {
