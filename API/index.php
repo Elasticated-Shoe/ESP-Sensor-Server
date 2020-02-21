@@ -3,7 +3,7 @@
 
     class Main {
         public static function init() {
-            spl_autoload_register("Main::autoloader");
+            spl_autoload_register("Main::autoloader", true);
 
             $userSession = new SessionTracker();
             $userSession->init();
@@ -24,10 +24,7 @@
             }
             if( class_exists($apiAction) ) {
                 $userAction = new $apiAction();
-                $userAction->init();
-
-                $userAction->readyResponse();
-                echo $userAction->response;
+                echo json_encode( $userAction->init() );
             }
             else {
                 http_response_code(400); // an invalid API action has been defined
@@ -43,6 +40,10 @@
         }
         public static function autoloader($class) {
             $actionsDir = 'protected/API Actions/';
+            $classFile = $actionsDir . $class . '.php';
+            if(file_exists($classFile)) {
+                include $classFile;
+            }
             $directories = glob($actionsDir . '*' , GLOB_ONLYDIR);
             foreach($directories as $dir) {
                 $classFile = $dir . "/" . $class . '.php';
@@ -66,6 +67,8 @@
             );
         }
     }
+    // I RETURN JSON
+    header('Content-Type: application/json');
     // disable notices
     error_reporting(0);
     // set an exception handler for all uncaught errors
