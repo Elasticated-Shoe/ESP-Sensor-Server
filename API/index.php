@@ -8,6 +8,11 @@
             $userSession = new SessionTracker();
             $userSession->init();
 
+            # https://stackoverflow.com/questions/11990767/post-empty-when-curling-json
+            # $_POST is an array that is only populated if you send the POST body in URL encoded format...
+            $json = file_get_contents('php://input');
+            $_POST = json_decode($json, true);
+
             if( isset($_GET["action"]) ) {
                 $apiAction = $_GET["action"];
             }
