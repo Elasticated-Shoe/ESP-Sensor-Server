@@ -87,7 +87,7 @@
     // I RETURN JSON
     header('Content-Type: application/json');
     // disable notices
-    if($GLOBALS["Config"]["Debug"]) {
+    if(!$GLOBALS["Config"]["Debug"]) {
         error_reporting(0);
     }
     // set an exception handler for all uncaught errors
