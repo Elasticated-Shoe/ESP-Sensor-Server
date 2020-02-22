@@ -1,18 +1,9 @@
 <?php
-    require_once("protected/Database/Database.php");
+    require_once("protected/API Actions/baseAction.php");
 
-    class readUser {
+    class readUser extends baseAction {
         function init() {
-            $readHandle = new DatabaseActions(
-                $GLOBALS["Config"]["Database"]["User"], 
-                $GLOBALS["Config"]["Database"]["Password"],
-                $GLOBALS["Config"]["Database"]["Location"], 
-                $GLOBALS["Config"]["Database"]["Database"]
-            );
-
-            $readHandle->connect();
-
-            return $this->actOnHandle($readHandle, $_GET["user"]);
+            return $this->actOnHandle($this->dbHandle, $_GET["user"]);
         }
         public function actOnHandle($readHandle, $user) {
             $query = "SELECT * FROM users WHERE userEmail = ?";

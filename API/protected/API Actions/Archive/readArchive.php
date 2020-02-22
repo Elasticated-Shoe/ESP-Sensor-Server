@@ -1,17 +1,8 @@
 <?php
-    require("protected/Database/Database.php");
+    require_once("protected/API Actions/baseAction.php");
 
-    class readArchive {
+    class readArchive extends baseAction {
         function init() {
-            $readHandle = new DatabaseActions(
-                $GLOBALS["Config"]["Database"]["User"], 
-                $GLOBALS["Config"]["Database"]["Password"],
-                $GLOBALS["Config"]["Database"]["Location"], 
-                $GLOBALS["Config"]["Database"]["Database"]
-            );
-
-            $readHandle->connect();
-
             $selectedArray = $_GET["sensors"];
             $startDate = $_GET["start"];
             $endDate = $_GET["end"];
@@ -29,7 +20,7 @@
                 array($startDate, $endDate)
             );
 
-            return $readHandle->runParameterizedQuery($query, $columnsArray, $params);
+            return $this->dbHandle->runParameterizedQuery($query, $columnsArray, $params);
         }
     }
 ?>

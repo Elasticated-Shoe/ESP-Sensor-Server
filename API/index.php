@@ -28,7 +28,8 @@
                 );
             }
             if( class_exists($apiAction) ) {
-                $userAction = new $apiAction();
+                $userAction = new $apiAction($userSession);
+                $userAction->connectDb();
                 echo json_encode( $userAction->init() );
             }
             else {
@@ -44,6 +45,9 @@
             }
         }
         public static function autoloader($class) {
+            if(strpos($class, "Base")) {
+                return;
+            }
             $actionsDir = 'protected/API Actions/';
             $classFile = $actionsDir . $class . '.php';
             if(file_exists($classFile)) {

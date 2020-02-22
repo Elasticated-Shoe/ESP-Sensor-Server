@@ -1,23 +1,15 @@
 <?php
-    require("protected/API Actions/readUser.php");
-    require("protected/API Actions/readFailedLogins.php");
+    require_once("protected/API Actions/baseAction.php");
+    require("protected/API Actions/User/readUser.php");
+    require("protected/API Actions/User/readFailedLogins.php");
 
-    class Login {
+    class Login extends baseAction {
         function init() {
-            $dbHandle = new DatabaseActions(
-                $GLOBALS["Config"]["Database"]["User"], 
-                $GLOBALS["Config"]["Database"]["Password"],
-                $GLOBALS["Config"]["Database"]["Location"], 
-                $GLOBALS["Config"]["Database"]["Database"]
-            );
+            $userObj = new readUser($this->session);
+            $user = $userObj->actOnHandle($this->dbHandle, $_POST["user"]);
 
-            $dbHandle->connect();
-
-            $userObj = new readUser();
-            $user = $userObj->actOnHandle($dbHandle, $_POST["user"]);
-
-            $userFailedLoginsObj = new readFailedLogins();
-            $userFailedLogins = $userFailedLoginsObj->actOnHandle($dbHandle, $_POST["user"]);
+            $userFailedLoginsObj = new readFailedLogins($this->session);
+            $userFailedLogins = $userFailedLoginsObj->actOnHandle($this->dbHandle, $_POST["user"]);
 
             // get datetime and string of now
             $strDatetimeNow = date("Y-m-d H:i:s");
@@ -33,14 +25,14 @@
                         array("is"),
                         array(0, $_POST["user"])
                     );
-                    $dbHandle->runParameterizedQuery($resetFailedQuery, null, $params);
+                    $this->dbHandle->runParameterizedQuery($resetFailedQuery, null, $params);
 
                     $lockQuery = "UPDATE users SET isLocked=0 WHERE userEmail = ?";
                     $params = array_merge(
                         array("s"),
                         array($_POST["user"])
                     );
-                    $dbHandle->runParameterizedQuery($lockQuery, null, $params);
+                    $this->dbHandle->runParameterizedQuery($lockQuery, null, $params);
 
                     $user["isLocked"] = 0;
                     $userFailedLogins["attemptCount"] = 0;
@@ -81,7 +73,7 @@
                     array("iss"),
                     array(++$userFailedLogins["attemptCount"], $strDatetimeNow, $_POST["user"])
                 );
-                $dbHandle->runParameterizedQuery($incrementFailedQuery, null, $params);
+                $this->dbHandle->runParameterizedQuery($incrementFailedQuery, null, $params);
 
                 // if the user has 3 failed logins then lock the account
                 if($userFailedLogins["attemptCount"] === 3) {
@@ -90,7 +82,7 @@
                         array("s"),
                         array($_POST["user"])
                     );
-                    $dbHandle->runParameterizedQuery($lockQuery, null, $params);
+                    $this->dbHandle->runParameterizedQuery($lockQuery, null, $params);
                 }
 
                 return array(

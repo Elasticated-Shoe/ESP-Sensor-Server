@@ -4,7 +4,7 @@
         private $databaseUser;
         private $databaseUrl;
         private $databasePass;
-        private $conn;
+        public $conn;
 
         function __construct($name, $pass, $server, $database) {
             $this->databaseName = $database;
@@ -13,7 +13,7 @@
             $this->databasePass = $pass;
         }
         function __destruct() {
-            $this->conn->close();
+            //$this->conn->close();
         }
         public function connect() {
             $mysqli = new mysqli($this->databaseUrl, $this->databaseUser, $this->databasePass, $this->databaseName);
