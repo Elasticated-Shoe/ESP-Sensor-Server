@@ -19,6 +19,8 @@
                 array($_POST["sensorId"], $_POST["sensorDatetime"], $_POST["sensorValue"])
             );
 
+            $writeHandle->runParameterizedQuery($query, null, $params);
+
             return array(
                 "Inserted" => 1
             );
