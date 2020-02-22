@@ -61,26 +61,37 @@
         public static function errorHandler($error) {
             http_response_code(500);
 
+            if($GLOBALS["Config"]["Debug"]) {
+                die(
+                    json_encode(
+                        array (
+                            "Message" => $error->getMessage(),
+                            "File" => $error->getFile(),
+                            "Line" => $error->getLine()
+                        )
+                    )
+                );
+            }
             die(
                 json_encode(
                     array (
-                        "Message" => $error->getMessage(),
-                        "File" => $error->getFile(),
-                        "Line" => $error->getLine()
+                        "Message" => "Something Went Wrong"
                     )
                 )
             );
         }
     }
+    // read in config options
+    $configFileContents = file_get_contents("config.json");
+    $GLOBALS["Config"] = json_decode($configFileContents, true);
     // I RETURN JSON
     header('Content-Type: application/json');
     // disable notices
-    error_reporting(0);
+    if($GLOBALS["Config"]["Debug"]) {
+        error_reporting(0);
+    }
     // set an exception handler for all uncaught errors
     set_exception_handler("Main::errorHandler");
-
-    $configFileContents = file_get_contents("config.json");
-    $GLOBALS["Config"] = json_decode($configFileContents, true);
 
     Main::init();
 ?>
