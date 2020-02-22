@@ -71,7 +71,8 @@
                 );
             }
             // password is incorrect
-            if(!password_verify($_POST["password"], $user["userPass"])) {
+            $preHashPass = $this->preHash($_POST["password"]);
+            if(!password_verify($preHashPass, $user["userPass"])) {
                 http_response_code(403);
 
                 // increment failed login count
@@ -102,6 +103,29 @@
         }
         protected function passwordInvalid($password) {
             return false;
+        }
+        public function generateHash($userPass) {
+            return password_hash(
+                $userPass,
+                PASSWORD_BCRYPT, 
+                [
+                    "cost" => $GLOBALS["Config"]["Password"]["Cost"]
+                ]
+            );
+        }
+        public function preHash($userPass) {
+            # lessens long password spamming
+            $userPass = $this->fastHash($userPass);
+            # in case of db compromise
+            $userPass = $this->pepperPassword($userPass);
+
+            return $userPass;
+        }
+        protected function fastHash($userPass) {
+            return hash('sha256', $userPass);
+        }
+        protected function pepperPassword($userPass) {
+            return $GLOBALS["Config"]["Password"]["Pepper"] . $userPass; # I HAVE NO HSM
         }
     }
 ?>
