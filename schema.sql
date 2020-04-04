@@ -3,6 +3,7 @@ CREATE DATABASE ESP_Project;
 CREATE TABLE users (
     userEmail VARCHAR(255) NOT NULL,
     userPass VARBINARY(255) NOT NULL,
+    isAdmin BIT NOT NULL,
     isLocked BIT NOT NULL,
 
     PRIMARY KEY (userEmail)
@@ -20,6 +21,7 @@ CREATE TABLE sensorMetadata (
     sensorId INT NOT NULL AUTO_INCREMENT,
     sensorName VARCHAR(255) NOT NULL,
     sensorOwner VARCHAR(21) NOT NULL,
+    sensorPublic BIT NOT NULL,
     displayName VARCHAR(255) NOT NULL,
     lastValue VARCHAR(255),
     sensorType VARCHAR(255),
