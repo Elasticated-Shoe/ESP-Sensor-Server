@@ -20,6 +20,7 @@
         private $class;
         private $url;
         private $directories = array();
+        public $targetUser;
 
         public function __construct() {
 
@@ -52,10 +53,13 @@
                     unset($pathArray[$pathAlias]);
                 }
             }
-            
-            if($pathArray[0] == "") {
-                unset($pathArray[0]);
+            $pathArray = array_filter($pathArray);
+
+            if(array_key_exists(2, $pathArray)) {
+                $this->targetUser = $pathArray[2];
+                unset($pathArray[2]);
             }
+
             array_unshift($pathArray, "Controllers");
 
             $this->pathDir = implode(DIRECTORY_SEPARATOR, $pathArray);

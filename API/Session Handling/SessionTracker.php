@@ -1,5 +1,7 @@
 <?php
     class SessionTracker {
+        private $apiTargetUser;
+
         public function init() {
             if(!isset($_SESSION)) {
                 // https://stackoverflow.com/questions/22221807/session-cookies-http-secure-flag-how-do-you-set-these
@@ -22,8 +24,17 @@
         public function isUser() {
             
         }
+        public function setUser($user) {
+            $this->apiTargetUser = $user;
+        }
+        public function getUser() {
+            return $this->apiTargetUser;
+        }
         public function setLogin($user) {
             $_SESSION["user"] = $user;
+        }
+        public function getLogin() {
+            return $_SESSION["user"];
         }
         public static function endRequest($code, $message) {
             http_response_code($code);

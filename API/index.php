@@ -12,6 +12,8 @@
 
             $apiAction = $router->getRouteFromUrl();
 
+            $userSession->setUser($router->targetUser);
+
             if(!$apiAction) {
                 SessionTracker::endRequest(404, "Route Not Found");
             }
