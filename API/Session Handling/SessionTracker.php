@@ -22,7 +22,10 @@
             $_SESSION['lastActivity'] = time(); // update last activity time stamp for the session
         }
         public function isUser() {
-            
+            if(!isset($_SESSION["user"])) {
+                return false;
+            }
+            return $this->apiTargetUser === $_SESSION["user"];
         }
         public function setUser($user) {
             $this->apiTargetUser = $user;
@@ -34,6 +37,9 @@
             $_SESSION["user"] = $user;
         }
         public function getLogin() {
+            if(!isset($_SESSION["user"])) {
+                return false;
+            }
             return $_SESSION["user"];
         }
         public static function endRequest($code, $message) {
