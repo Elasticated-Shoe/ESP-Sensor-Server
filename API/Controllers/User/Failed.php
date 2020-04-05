@@ -1,7 +1,7 @@
 <?php
     require("Controllers/AbstractController.php");
 
-    class readFailedLogins extends AbstractController {
+    class Failed extends AbstractController {
         function CheckInput() {
             if($_SERVER['REQUEST_METHOD'] !== 'GET') {
                 return "Method Must Be GET";

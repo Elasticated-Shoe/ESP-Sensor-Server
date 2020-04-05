@@ -1,15 +1,22 @@
 <?php
     require("Controllers/AbstractController.php");
 
-    class readUser extends AbstractController {
+    class Find extends AbstractController {
         function CheckInput() {
+            if($_SERVER['REQUEST_METHOD'] !== 'GET') {
+                return "Method Must Be GET";
+            }
             return true;
         }
         function CheckPermission() {
+            $DoesLoggedInUserMatchRequestedUser = $this->session->isUser();
+            if(!$DoesLoggedInUserMatchRequestedUser) {
+                return "You Are Not Logged In For That User";
+            }
             return true;
         }
         function Action() {
-            return $this->dbCache->findUser($_GET["user"]);
+            return $this->dbCache->findUser($this->session->getLogin());
         }
     }
 ?>
