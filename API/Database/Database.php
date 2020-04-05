@@ -25,7 +25,7 @@
         function runParameterizedQuery($query, $columnsArray = null, $params = null) {
             $preparedQuery = $this->conn->prepare($query);
             if (!$preparedQuery) {
-                throw new exception($conn->error);
+                throw new exception($this->conn->error);
             }
             // if passing straight query with no parameters dont need this
             if($params !== null) {
