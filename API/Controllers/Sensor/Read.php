@@ -1,27 +1,22 @@
 <?php
     require("Controllers/AbstractController.php");
 
-    class readMeta extends AbstractController {
+    class Read extends AbstractController {
         function CheckInput() {
+            if($_SERVER['REQUEST_METHOD'] !== 'GET') {
+                return "Insert Method Must Be GET";
+            }
             return true;
         }
         function CheckPermission() {
+            $DoesLoggedInUserMatchRequestedUser = $this->session->isUser();
+            if(!$DoesLoggedInUserMatchRequestedUser) {
+                return "You Are Not Logged In For That User";
+            }
             return true;
         }
         function Action() {
-            $query = "SELECT * FROM sensorMetadata WHERE sensorOwner = ?";
-
-            $columnsArray = array(
-                "sensorId", "sensorName", "sensorOwner", "displayName", "lastValue", "sensorType", "sensorUnits", 
-                "sensorLocation", "sensorVersion", "lastSeen"
-            );
-
-            $params = array_merge(
-                array("s"),
-                array($_GET["owner"]),
-            );
-
-            return $this->dbHandle->runParameterizedQuery($query, $columnsArray, $params);
+            return $this->dbCache->getUsersSensorMetadata($this->session->getLogin());
         }
     }
 ?>
