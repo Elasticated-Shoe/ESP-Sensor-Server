@@ -139,5 +139,20 @@
 
             $this->dbHandle->runParameterizedQuery($query, null, $params);
         }
+        public function readEvents($user) {
+            $query = "SELECT * FROM eventLog WHERE eventId = ?";
+
+            $columnsArray = array(
+                "eventId", "eventName", "eventSensor", "eventTime", "eventOngoing", 
+                "eventDesc", "userInformed", "userAck"
+            );
+
+            $params = array_merge(
+                array("s"),
+                array($user),
+            );
+
+            return $this->dbHandle->runParameterizedQuery($query, $columnsArray, $params);
+        }
     }
 ?>

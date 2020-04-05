@@ -1,27 +1,22 @@
 <?php
     require("Controllers/AbstractController.php");
 
-    class readEvents extends AbstractController {
+    class Read extends AbstractController {
         function CheckInput() {
+            if($_SERVER['REQUEST_METHOD'] !== 'GET') {
+                return "Method Must Be GET";
+            }
             return true;
         }
         function CheckPermission() {
+            $DoesLoggedInUserMatchRequestedUser = $this->session->isUser();
+            if(!$DoesLoggedInUserMatchRequestedUser) {
+                return "You Are Not Logged In For That User";
+            }
             return true;
         }
         function Action() {
-            $query = "SELECT * FROM eventLog WHERE eventId = ?";
-
-            $columnsArray = array(
-                "eventId", "eventName", "eventSensor", "eventTime", "eventOngoing", 
-                "eventDesc", "userInformed", "userAck"
-            );
-
-            $params = array_merge(
-                array("s"),
-                array($_GET["owner"]),
-            );
-
-            return $this->dbHandle->runParameterizedQuery($query, $columnsArray, $params);
+            return $this->dbCache->readEvents($this->session->getLogin());
         }
     }
 ?>
