@@ -17,16 +17,19 @@
             $allRequestedSensors = $this->dbCache->getSensorSensorMetadata( $_GET["sensors"] );
 
             $publicAndOwned = true;
-            // $sensor["sensorOwner"] !== $this->session->getUser()
-            // public and owned by me fix need to get working
+            $allPublic = true;
+            
             foreach($allRequestedSensors as $sensor) {
+                if(!$sensor["sensorPublic"]) {
+                    $allPublic = false;
+                }
                 if(!$sensor["sensorPublic"] && $sensor["sensorOwner"] !== $this->session->getUser()) {
                     $publicAndOwned = false;
                 }
             }
 
             // if you do not own the sensors but you have only requested sensors you own or a public
-            if(!$DoesLoggedInUserMatchRequestedUser || !$publicAndOwned) {
+            if(!$allPublic && (!$DoesLoggedInUserMatchRequestedUser || !$publicAndOwned) ) {
                 return "You Are Not Authorized To View Some Of The Requested Data";
             }
             return true;
