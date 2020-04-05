@@ -129,5 +129,15 @@
                 $this->dbHandle->runParameterizedQuery($lockQuery, null, $params2);
             }
         }
+        public function insertArchive($sensorId, $sensorValue, $dateTime) {
+            $query = "INSERT INTO sensorData(sensorId, sensorDatetime, sensorValue) VALUES (?, ?, ?)";
+
+            $params = array_merge(
+                array("iss"),
+                array($sensorId, $dateTime, $sensorValue)
+            );
+
+            $this->dbHandle->runParameterizedQuery($query, null, $params);
+        }
     }
 ?>
