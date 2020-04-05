@@ -21,12 +21,12 @@
             // public and owned by me fix need to get working
             foreach($allRequestedSensors as $sensor) {
                 if(!$sensor["sensorPublic"] && $sensor["sensorOwner"] !== $this->session->getUser()) {
-                    $publicOrOwned = false;
+                    $publicAndOwned = false;
                 }
             }
 
             // if you do not own the sensors but you have only requested sensors you own or a public
-            if(!$DoesLoggedInUserMatchRequestedUser || !$publicOrOwned) {
+            if(!$DoesLoggedInUserMatchRequestedUser || !$publicAndOwned) {
                 return "You Are Not Authorized To View Some Of The Requested Data";
             }
             return true;
