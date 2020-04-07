@@ -6,8 +6,11 @@
             if($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 return "Insert Method Must Be Post";
             }
-            if(!isset($_POST["sensorId"]) || !isset($_POST["sensorValue"])) {
-                return "Please Provide A sensorId And A sensorValue";
+            if( (!isset($_POST["sensorId"]) || !isset($_POST["sensorValue"]) ) && !isset($_POST["data"])) {
+                return "Please Post Some Data";
+            }
+            if(isset($_POST["sensorId"]) && isset($_POST["sensorId"]) && isset($_POST["data"])) {
+                return "Pass Either An Array Or Single Value. Not Both";
             }
             return true;
         }
@@ -33,10 +36,18 @@
             return true;
         }
         function Action() {
-            $dateTime = isset($_POST["sensorDatetime"]) ? $_POST["sensorDatetime"] : date("Y-m-d H:i:s");
+            if(isset($_POST["data"])) {
+                foreach($_POST["data"] as $sensor) {
+                    $dateTime = isset($sensor["sensorDatetime"]) ? $sensor["sensorDatetime"] : date("Y-m-d H:i:s");
 
-            $this->dbCache->insertArchive($_POST["sensorId"], $_POST["sensorValue"], $dateTime);
+                    $this->dbCache->insertArchive($sensor["sensorId"], $sensor["sensorValue"], $dateTime);
+                }
+            }
+            else {
+                $dateTime = isset($_POST["sensorDatetime"]) ? $_POST["sensorDatetime"] : date("Y-m-d H:i:s");
 
+                $this->dbCache->insertArchive($_POST["sensorId"], $_POST["sensorValue"], $dateTime);
+            }
             return "Inserted";
         }
     }
