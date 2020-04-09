@@ -37,7 +37,12 @@
                     $datetimeNow = strtotime($this->strDatetimeNow);
                     $timeAgoInMin = abs($datetimeNow - $lastFailedLoginDatetime) / 60;
                     if($timeAgoInMin > 10) {
-                        $this->dbCache->updateAttempts($_POST["user"]);
+                        $userObject = array(
+                            "userEmail" => $_POST["user"]["userEmail"],
+                            "attemptCount" => 0,
+                            "isLocked" => 0
+                        );
+                        $this->dbHandle->crud("userFailedLogins", "update", $userObject);
 
                         $this->user["isLocked"] = 0;
                         $this->userAttempts["attemptCount"] = 0;
@@ -53,7 +58,20 @@
         function Action() {
             $preHashPass = $this->preHash($_POST["password"]);
             if(!password_verify($preHashPass, $this->user["userPass"])) {
-                $this->dbCache->incrementAttempts($this->userAttempts, $this->strDatetimeNow, $this->user);
+                $newAttemptCount = $this->userAttempts + 1;
+                $userObject = array(
+                    "userEmail" => $_POST["user"]["userEmail"],
+                    "attemptCount" => $newAttemptCount,
+                    "attemptDatetime" => $this->strDatetimeNow
+                );
+                $this->dbHandle->crud("userFailedLogins", "update", $userObject);
+                if($userFailedLogins["attemptCount"] === 3) {
+                    $userObject = array(
+                        "userEmail" => $_POST["user"]["userEmail"],
+                        "isLocked" => 1,
+                    );
+                    $this->dbHandle->crud("userFailedLogins", "update", $userObject);
+                }
 
                 return "Incorrect Password";
             }

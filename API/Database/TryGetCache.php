@@ -1,26 +1,16 @@
 <?php
-    require("Database/Database.php");
-
     class TryGetCache {
         private $dbHandle;
-        private $metaColumns = array(
-            "sensorId", "sensorName", "sensorOwner", "displayName", "lastValue", "sensorType", "sensorUnits", 
-            "sensorLocation", "sensorVersion", "lastSeen", "sensorPublic"
-        );
 
-        public function connectDb() {
-            $this->dbHandle = new DatabaseActions(
-                $GLOBALS["Config"]["Database"]["User"], 
-                $GLOBALS["Config"]["Database"]["Password"],
-                $GLOBALS["Config"]["Database"]["Location"], 
-                $GLOBALS["Config"]["Database"]["Database"]
-            );
-            $this->dbHandle->connect();
+        function __construct($dbConnection) {
+            $this->dbHandle = $dbConnection;
         }
         public function getUsersSensorMetadata($owner) {
             $query = "SELECT * FROM sensorMetadata WHERE sensorOwner = ?";
 
-            $columnsArray = $this->metaColumns;
+            $schema = $this->dbHandle->tableFactory->getTable("sensorMetadata");
+
+            $columnsArray = array_merge(array($schema->getKey()), $schema->getColumns());
 
             $params = array_merge(
                 array("s"),
@@ -36,7 +26,8 @@
             $selectedParamString = substr($selectedParamString, 0, -4); // remove last ' OR '
             $query = str_replace("SelectedSensors", $selectedParamString, $query);
 
-            $columnsArray = $this->metaColumns;
+            $schema = $this->dbHandle->tableFactory->getTable("sensorMetadata");
+            $columnsArray = array_merge(array($schema->getKey()), $schema->getColumns());
 
             $params = array_merge(
                 array( str_repeat('i', count( $sensorArray )) ),
@@ -53,7 +44,8 @@
             $selectedParamString = substr($selectedParamString, 0, -4); // remove last ' OR '
             $query = str_replace("SelectedSensors", $selectedParamString, $query);
 
-            $columnsArray = array("sensorId", "sensorDatetime", "sensorValue");
+            $schema = $this->dbHandle->tableFactory->getTable("sensorData");
+            $columnsArray = $schema->getColumns();
 
             $params = array_merge(
                 array(str_repeat('i', count( $selectedArray )) . "ss"),
@@ -66,7 +58,8 @@
         public function findUser($user) {
             $query = "SELECT * FROM users WHERE userEmail = ?";
 
-            $columnsArray = array("userEmail", "userPass", "isLocked", "isAdmin");
+            $schema = $this->dbHandle->tableFactory->getTable("users");
+            $columnsArray = array_merge(array($schema->getKey()), $schema->getColumns());
 
             $params = array_merge(
                 array("s"),
@@ -82,7 +75,8 @@
         public function readAttempts($user) {
             $query = "SELECT * FROM userFailedLogins WHERE userEmail = ?";
 
-            $columnsArray = array("userEmail", "attemptCount", "attemptDatetime");
+            $schema = $this->dbHandle->tableFactory->getTable("userFailedLogins");
+            $columnsArray = array_merge(array($schema->getKey()), $schema->getColumns());
 
             $params = array_merge(
                 array("s"),
@@ -95,57 +89,11 @@
             }
             return false;
         }
-        public function updateAttempts($user) {
-            $resetFailedQuery = "UPDATE userFailedLogins SET attemptCount=? WHERE userEmail = ?";
-            $params = array_merge(
-                array("is"),
-                array(0, $user)
-            );
-            $this->dbHandle->runParameterizedQuery($resetFailedQuery, null, $params);
-
-            $lockQuery = "UPDATE users SET isLocked=0 WHERE userEmail = ?";
-            $params2 = array_merge(
-                array("s"),
-                array($user)
-            );
-            $this->dbHandle->runParameterizedQuery($lockQuery, null, $params2);
-        }
-        public function incrementAttempts($userFailedLogins, $strDatetimeNow, $user) {
-            // increment failed login count
-            $incrementFailedQuery = "UPDATE userFailedLogins SET attemptCount=?, attemptDatetime=? WHERE userEmail = ?";
-            $params = array_merge(
-                array("iss"),
-                array(++$userFailedLogins["attemptCount"], $strDatetimeNow, $user)
-            );
-            $this->dbHandle->runParameterizedQuery($incrementFailedQuery, null, $params);
-
-            // if the user has 3 failed logins then lock the account
-            if($userFailedLogins["attemptCount"] === 3) {
-                $lockQuery = "UPDATE users SET isLocked=1 WHERE userEmail = ?";
-                $params2 = array_merge(
-                    array("s"),
-                    array($user)
-                );
-                $this->dbHandle->runParameterizedQuery($lockQuery, null, $params2);
-            }
-        }
-        public function insertArchive($sensorId, $sensorValue, $dateTime) {
-            $query = "INSERT INTO sensorData(sensorId, sensorDatetime, sensorValue) VALUES (?, ?, ?)";
-
-            $params = array_merge(
-                array("iss"),
-                array($sensorId, $dateTime, $sensorValue)
-            );
-
-            $this->dbHandle->runParameterizedQuery($query, null, $params);
-        }
         public function readEvents($user) {
             $query = "SELECT * FROM eventLog WHERE eventId = ?";
 
-            $columnsArray = array(
-                "eventId", "eventName", "eventSensor", "eventTime", "eventOngoing", 
-                "eventDesc", "userInformed", "userAck"
-            );
+            $schema = $this->dbHandle->tableFactory->getTable("eventLog");
+            $columnsArray = $schema->getColumns();
 
             $params = array_merge(
                 array("s"),
@@ -157,9 +105,8 @@
         public function readTypes($user) {
             $query = "SELECT * FROM eventTypes WHERE eventOwner = ?";
 
-            $columnsArray = array(
-                "eventId", "eventOwner", "eventName", "eventSensor", "eventAction", "eventData"
-            );
+            $schema = $this->dbHandle->tableFactory->getTable("eventTypes");
+            $columnsArray = array_merge(array($schema->getKey()), $schema->getColumns());
 
             $params = array_merge(
                 array("s"),

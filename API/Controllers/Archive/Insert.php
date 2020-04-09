@@ -40,13 +40,23 @@
                 foreach($_POST["data"] as $sensor) {
                     $dateTime = isset($sensor["sensorDatetime"]) ? $sensor["sensorDatetime"] : date("Y-m-d H:i:s");
 
-                    $this->dbCache->insertArchive($sensor["sensorId"], $sensor["sensorValue"], $dateTime);
+                    $sensorObject = array(
+                        "sensorId" => $sensor["sensorId"],
+                        "sensorDatetime" => $sensor["sensorValue"],
+                        "sensorValue" => $dateTime,
+                    );
+                    $this->dbHandle->crud("sensorData", "insert", $sensorObject);
                 }
             }
             else {
                 $dateTime = isset($_POST["sensorDatetime"]) ? $_POST["sensorDatetime"] : date("Y-m-d H:i:s");
 
-                $this->dbCache->insertArchive($_POST["sensorId"], $_POST["sensorValue"], $dateTime);
+                $sensorObject = array(
+                    "sensorId" => $_POST["sensorId"],
+                    "sensorDatetime" => $_POST["sensorValue"],
+                    "sensorValue" => $dateTime,
+                );
+                $this->dbHandle->crud("sensorData", "insert", $sensorObject);
             }
             return "Inserted";
         }
