@@ -95,7 +95,7 @@
     }
     class eventLog {
         public function getKey() {
-            return null;
+            return "logId";
         }
         public function getColumns() {
             return array("eventId", "eventName", "eventSensor", "eventTime", "eventOngoing", "eventDesc", "userInformed", "userAck");

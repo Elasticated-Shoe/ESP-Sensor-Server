@@ -51,6 +51,7 @@ CREATE TABLE eventTypes (
     PRIMARY KEY (eventId)
 );
 CREATE TABLE eventLog (
+    logId INT NOT NULL AUTO_INCREMENT,
     eventId INT NOT NULL,
     eventName VARCHAR(15) NOT NULL,
     eventSensor INT NOT NULL,
@@ -62,7 +63,8 @@ CREATE TABLE eventLog (
 
     FOREIGN KEY (eventSensor) REFERENCES sensorMetadata(sensorId),
     FOREIGN KEY (eventId) REFERENCES eventTypes(eventId),
-    INDEX (eventId, eventOngoing, eventTime)
+    INDEX (eventId, eventOngoing, eventTime),
+    PRIMARY KEY (logId)
 );
 
 CREATE TABLE sensorData (
