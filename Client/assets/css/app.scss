@@ -1,0 +1,22 @@
+.sensor-node {
+    border: 8px solid black;
+    border-radius: 5px;
+    padding: 0 !important;
+}
+
+.sensor-reading {
+    cursor: pointer;
+}
+    .sensor-reading div {
+        height: 55px;
+        margin: 5px;
+    }
+        .active div{
+            background-color: green;
+        }
+        .inactive div{
+            background-color: red;
+        }
+        .sensor-reading div span {
+            word-wrap: break-word;
+        }
