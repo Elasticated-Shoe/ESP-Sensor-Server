@@ -37,6 +37,18 @@
     // read in config options
     $configFileContents = file_get_contents("config.json");
     $GLOBALS["Config"] = json_decode($configFileContents, true);
+    // allow configured CORS
+    if (isset($_SERVER['HTTP_ORIGIN']) && $_SERVER['HTTP_ORIGIN'] != '') {
+        foreach ($GLOBALS["Config"]["Web"]["Clients"] as $allowedOrigin) {
+            if (preg_match('#' . $allowedOrigin . '#', $_SERVER['HTTP_ORIGIN'])) {
+                header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+                header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+                header('Access-Control-Max-Age: 1000');
+                header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+                break;
+            }
+        }
+    }
     // I RETURN JSON
     //header('Content-Type: application/json');
     // disable notices

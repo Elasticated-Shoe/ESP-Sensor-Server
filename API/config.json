@@ -1,0 +1,17 @@
+{
+    "Database": {
+        "Location": "localhost",
+        "User": "root",
+        "Password": "",
+        "Database": "ESP_Project"
+    },
+    "Web": {
+        "Alias": ["phplogin"],
+        "Clients": ["http://localhost:8080"]
+    },
+    "Password": {
+        "Pepper": "b4a5d2aac37675e7b313d2855b1de9a3",
+        "Cost": 14
+    },
+    "Debug": true
+}
