@@ -1,26 +1,28 @@
 CREATE DATABASE ESP_Project;
 
 CREATE TABLE users (
+    userId INT NOT NULL AUTO_INCREMENT,
     userEmail VARCHAR(255) NOT NULL,
-    userPass VARBINARY(255) NOT NULL,
+    userPass VARCHAR(255) NOT NULL,
     isAdmin BIT NOT NULL,
     isLocked BIT NOT NULL,
 
-    PRIMARY KEY (userEmail)
+    INDEX (userEmail),
+    PRIMARY KEY (userId)
 );
 CREATE TABLE userFailedLogins (
-    userEmail VARCHAR(255) NOT NULL,
+    userId int NOT NULL,
     attemptCount TINYINT NOT NULL,
     attemptDatetime DATETIME NOT NULL,
 
-    FOREIGN KEY (userEmail) REFERENCES users(userEmail),
-    PRIMARY KEY (userEmail)
+    FOREIGN KEY (userId) REFERENCES users(userId),
+    PRIMARY KEY (userId)
 );
 
 CREATE TABLE sensorMetadata (
     sensorId INT NOT NULL AUTO_INCREMENT,
     sensorName VARCHAR(255) NOT NULL,
-    sensorOwner VARCHAR(21) NOT NULL,
+    sensorOwner int NOT NULL,
     sensorPublic BIT NOT NULL,
     displayName VARCHAR(255) NOT NULL,
     lastValue VARCHAR(255),
@@ -30,23 +32,22 @@ CREATE TABLE sensorMetadata (
     sensorVersion TINYINT,
     lastSeen DATETIME,
 
-    FOREIGN KEY (sensorOwner) REFERENCES users(userEmail),
+    FOREIGN KEY (sensorOwner) REFERENCES users(userId),
     CONSTRAINT uniqueOwnerName UNIQUE (sensorName, sensorOwner),
     INDEX (sensorOwner, sensorId),
-    INDEX (sensorOwner),
     PRIMARY KEY (sensorId)
 );
 
 CREATE TABLE eventTypes (
     eventId INT NOT NULL AUTO_INCREMENT,
-    eventOwner VARCHAR(255) NOT NULL,
+    eventOwner int NOT NULL,
     eventName VARCHAR (30) NOT NULL,
     eventSensor INT NOT NULL,
     eventAction VARCHAR(15) NOT NULL,
     eventData VARCHAR(255),
 
     FOREIGN KEY (eventSensor) REFERENCES sensorMetadata(sensorId),
-    FOREIGN KEY (eventOwner) REFERENCES users(userEmail),
+    FOREIGN KEY (eventOwner) REFERENCES users(userId),
     INDEX (eventOwner),
     PRIMARY KEY (eventId)
 );
