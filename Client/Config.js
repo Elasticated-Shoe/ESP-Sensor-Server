@@ -1,5 +1,5 @@
 export const config = {
-    apiBaseUrl: "https://localhost/phplogin/",
+    apiBaseUrl: "http://localhost:8000",
     inactivity: 60,
     refresh: 10,
     demo: true,
