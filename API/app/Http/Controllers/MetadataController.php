@@ -61,4 +61,20 @@ class MetadataController extends Controller {
             "Message" => "Action Succesful"
         );
     }
+
+    public function deleteSensorMetadata(Request $request, $id) {
+        $selectedSensor = sensorMetadata::find( $id );
+
+        if($selectedSensor === null) {
+            return array(
+                "Message" => "Sensor {$id} Not Found"
+            );
+        }
+
+        $selectedSensor->delete();
+
+        return array(
+            "Message" => "Action Succesful"
+        );
+    }
 }
