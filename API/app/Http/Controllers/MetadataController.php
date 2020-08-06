@@ -41,4 +41,24 @@ class MetadataController extends Controller {
             "Message" => "Action Succesful"
         );
     }
+
+    public function updateSensorMetadata(Request $request) {
+        $validatedData = $this->validate($request, [
+            'sensorId' => 'required|integer',
+            'sensorType' => 'max:255'
+        ]);
+
+        $selectedSensor = sensorMetadata::find($validatedData["sensorId"]);
+        if($selectedSensor === null) {
+            return array(
+                "Message" => "Sensor {$validatedData['sensorId']} Not Found"
+            );
+        }
+
+        $selectedSensor->update($validatedData);
+        
+        return array(
+            "Message" => "Action Succesful"
+        );
+    }
 }

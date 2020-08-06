@@ -19,6 +19,7 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'sensors'], function () use ($router) {
     $router->put('new', 'MetadataController@createSensorMetadata');
+    $router->post('id/{id}', 'MetadataController@updateSensorMetadata');
 
     // return array of matches
     $router->get('', 'MetadataController@filterById');
