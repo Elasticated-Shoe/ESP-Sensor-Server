@@ -22,4 +22,23 @@ class MetadataController extends Controller {
 
         return sensorMetadata::whereIn("sensorId", $idArray)->get();
     }
+
+    public function createSensorMetadata(Request $request) {
+        $validatedData = $this->validate($request, [
+            'sensorName' => 'required|max:255',
+            'sensorOwner' => 'required|integer',
+            'sensorPublic' => 'required|boolean',
+            'displayName' => 'required|max:255',
+        ]);
+
+        $newSensor = new sensorMetadata();
+        $newSensorData = $request->only($newSensor->getFillable());
+        $newSensor->fill($newSensorData);
+
+        $newSensor->save();
+        
+        return array(
+            "Message" => "Action Succesful"
+        );
+    }
 }

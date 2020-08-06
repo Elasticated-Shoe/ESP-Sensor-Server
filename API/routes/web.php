@@ -17,20 +17,13 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/test', function () use ($router) {
-    return "test";
-});
-
-$router->get('/data', function () use ($router) {
-    $flights = App\users::all();
-    
-    //return $flights->toJson();
-    return $flights;
-    //return response()->json( $flights );
-});
-
 $router->group(['prefix' => 'sensors'], function () use ($router) {
+    $router->put('new', 'MetadataController@createSensorMetadata');
+
+    // return array of matches
     $router->get('', 'MetadataController@filterById');
-    $router->get('id/{id}', 'MetadataController@findById');
     $router->get('user/{user}', 'MetadataController@findByUser');
+
+    // return single object
+    $router->get('id/{id}', 'MetadataController@findById');
 });
