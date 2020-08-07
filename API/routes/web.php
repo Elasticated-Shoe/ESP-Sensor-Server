@@ -22,6 +22,9 @@ $router->group(['prefix' => 'sensors'], function () use ($router) {
     $router->post('id/{id}', 'MetadataController@updateSensorMetadata');
     $router->delete('id/{id}', 'MetadataController@deleteSensorMetadata');
 
+    // accept array of updated
+    $router->post('', 'MetadataController@batchUpdateSensorMetadata');
+
     // return array of matches
     $router->get('', 'MetadataController@filterById');
     $router->get('user/{user}', 'MetadataController@findByUser');

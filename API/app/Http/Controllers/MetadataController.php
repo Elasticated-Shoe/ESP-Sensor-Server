@@ -77,4 +77,21 @@ class MetadataController extends Controller {
             "Message" => "Action Succesful"
         );
     }
+
+    public function batchUpdateSensorMetadata(Request $request) {
+        $validatedData = $this->validate($request, [
+            '*' => 'required|array',
+            '*.sensorId' => 'required|integer',
+            '*.sensorType' => 'max:255',
+        ])["*"];
+
+        foreach($validatedData as $newSensorData) {
+            $selectedSensor = sensorMetadata::find($newSensorData["sensorId"]);
+            $selectedSensor->update($newSensorData);
+        }
+        
+        return array(
+            "Message" => "Action Succesful"
+        );
+    }
 }
