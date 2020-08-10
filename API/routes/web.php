@@ -17,7 +17,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => 'sensors'], function () use ($router) {
+$router->group(['prefix' => 'sensors/metadata'], function () use ($router) {
     $router->put('new', 'MetadataController@createSensorMetadata');
     $router->post('id/{id}', 'MetadataController@updateSensorMetadata');
     $router->delete('id/{id}', 'MetadataController@deleteSensorMetadata');
@@ -31,4 +31,7 @@ $router->group(['prefix' => 'sensors'], function () use ($router) {
 
     // return single object
     $router->get('id/{id}', 'MetadataController@findById');
+});
+$router->group(['prefix' => 'sensors'], function () use ($router) {
+    $router->get('', 'DataController@getReadings');
 });
