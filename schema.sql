@@ -1,5 +1,7 @@
 CREATE DATABASE ESP_Project;
 
+USE ESP_Project;
+
 CREATE TABLE users (
     userId INT NOT NULL AUTO_INCREMENT,
     userEmail VARCHAR(255) NOT NULL,
@@ -38,41 +40,13 @@ CREATE TABLE sensorMetadata (
     PRIMARY KEY (sensorId)
 );
 
-CREATE TABLE eventTypes (
-    eventId INT NOT NULL AUTO_INCREMENT,
-    eventOwner int NOT NULL,
-    eventName VARCHAR (30) NOT NULL,
-    eventSensor INT NOT NULL,
-    eventAction VARCHAR(15) NOT NULL,
-    eventData VARCHAR(255),
-
-    FOREIGN KEY (eventSensor) REFERENCES sensorMetadata(sensorId),
-    FOREIGN KEY (eventOwner) REFERENCES users(userId),
-    INDEX (eventOwner),
-    PRIMARY KEY (eventId)
-);
-CREATE TABLE eventLog (
-    logId INT NOT NULL AUTO_INCREMENT,
-    eventId INT NOT NULL,
-    eventName VARCHAR(15) NOT NULL,
-    eventSensor INT NOT NULL,
-    eventTime DATETIME NOT NULL,
-    eventOngoing BIT NOT NULL,
-    eventDesc VARCHAR(255) NOT NULL,
-    userInformed BIT NOT NULL,
-    userAck BIT NOT NULL,
-
-    FOREIGN KEY (eventSensor) REFERENCES sensorMetadata(sensorId),
-    FOREIGN KEY (eventId) REFERENCES eventTypes(eventId),
-    INDEX (eventId, eventOngoing, eventTime),
-    PRIMARY KEY (logId)
-);
-
 CREATE TABLE sensorData (
+    dataId INT NOT NULL AUTO_INCREMENT,
     sensorId INT NOT NULL,
     sensorDatetime DATETIME NOT NULL,
-    sensorValue VARCHAR(255) NOT NULL,
+    sensorValue DECIMAL(5, 2) NOT NULL,
 
     FOREIGN KEY (sensorId) REFERENCES sensorMetadata(sensorId),
-    INDEX (sensorId, sensorDatetime)
+    INDEX (sensorId, sensorDatetime),
+    PRIMARY KEY (dataId)
 ) ROW_FORMAT=COMPRESSED;
