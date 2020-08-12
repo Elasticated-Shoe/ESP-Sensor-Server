@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class sensorData extends Model
 {
     protected $table = 'sensorData';
-    protected $primaryKey = null;
+    protected $primaryKey = "dataId";
     public $timestamps = false;
 
     protected $fillable = ["sensorId", "sensorDatetime", "sensorValue"];
