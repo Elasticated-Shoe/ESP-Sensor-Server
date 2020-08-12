@@ -33,5 +33,8 @@ $router->group(['prefix' => 'sensors/metadata'], function () use ($router) {
     $router->get('id/{id}', 'MetadataController@findById');
 });
 $router->group(['prefix' => 'sensors'], function () use ($router) {
+    $router->put('id/{id}', 'DataController@createReading');
+    
+    // return readings meeting id and date range criteria
     $router->get('', 'DataController@getReadings');
 });
