@@ -52,4 +52,18 @@ class DataController extends Controller {
             "Message" => "Action Succesful"
         );
     }
+    public function batchCreateReadings(Request $request) {
+        $validatedData = $this->validate($request, [
+            '*' => 'required|array',
+            '*.sensorId' => 'required|integer',
+            '*.sensorDatetime' => 'required|date',
+            '*.sensorValue' => 'required|numeric|between:0.00,999.99'
+        ])["*"];
+        
+        sensorData::insert($validatedData);
+
+        return array(
+            "Message" => "Action Succesful"
+        );
+    }
 }

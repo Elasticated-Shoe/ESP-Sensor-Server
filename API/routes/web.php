@@ -35,6 +35,9 @@ $router->group(['prefix' => 'sensors/metadata'], function () use ($router) {
 $router->group(['prefix' => 'sensors'], function () use ($router) {
     $router->put('id/{id}', 'DataController@createReading');
     
+    // accept array to insert
+    $router->put('', 'DataController@batchCreateReadings');
+
     // return readings meeting id and date range criteria
     $router->get('', 'DataController@getReadings');
 });
