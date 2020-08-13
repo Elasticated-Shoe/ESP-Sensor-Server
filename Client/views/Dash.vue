@@ -73,7 +73,7 @@
 			getMeta() {
 				var self = this;
 
-				const readMeta = config.apiBaseUrl + "/sensors/user/1";
+				const readMeta = config.apiBaseUrl + "/sensors/metadata/user/1";
 
 				api({method: "GET", url: readMeta}).then(function(response) {
 					response.forEach((sensorVal, sensorIndex) => {
