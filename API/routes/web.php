@@ -41,3 +41,7 @@ $router->group(['prefix' => 'sensors'], function () use ($router) {
     // return readings meeting id and date range criteria
     $router->get('', 'DataController@getReadings');
 });
+$router->group(['prefix' => 'authenticate'], function () use ($router) {
+    $router->post('', 'AuthController@getToken');
+    $router->get('', ['uses' => 'AuthController@testToken', 'middleware' => 'jwt.auth']);
+});
