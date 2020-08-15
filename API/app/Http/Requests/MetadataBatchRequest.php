@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Urameshibr\Requests\FormRequest;
+use App\Http\Requests\FormRequest;
 
-class TestRequest extends FormRequest
+class MetadataBatchRequest extends FormRequest
 {
 	public function authorize()
 	{

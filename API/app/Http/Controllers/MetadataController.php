@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\sensorMetadata;
 
+use App\Http\Requests\MetadataBatchRequest;
+use App\Http\Requests\sensorGetParameterRequest;
+use App\Http\Requests\MetadataRequest;
+use App\Http\Requests\MetadataCreateRequest;
+
 class MetadataController extends Controller {
     public function findById(Request $request, $id) {
         return sensorMetadata::find($id);
@@ -23,13 +28,8 @@ class MetadataController extends Controller {
         return sensorMetadata::whereIn("sensorId", $idArray)->get();
     }
 
-    public function createSensorMetadata(Request $request) {
-        $validatedData = $this->validate($request, [
-            'sensorName' => 'required|max:255',
-            'sensorOwner' => 'required|integer',
-            'sensorPublic' => 'required|boolean',
-            'displayName' => 'required|max:255',
-        ]);
+    public function createSensorMetadata(MetadataCreateRequest $request) {
+        $validatedData = $request->validated();
 
         $newSensor = new sensorMetadata();
         $newSensorData = $request->only($newSensor->getFillable());
@@ -42,11 +42,8 @@ class MetadataController extends Controller {
         );
     }
 
-    public function updateSensorMetadata(Request $request) {
-        $validatedData = $this->validate($request, [
-            'sensorId' => 'required|integer',
-            'sensorType' => 'max:255'
-        ]);
+    public function updateSensorMetadata(MetadataRequest $request, $id) {
+        $validatedData = $request->validated();
 
         $selectedSensor = sensorMetadata::find($validatedData["sensorId"]);
         if($selectedSensor === null) {
@@ -62,8 +59,9 @@ class MetadataController extends Controller {
         );
     }
 
-    public function deleteSensorMetadata(Request $request, $id) {
-        $selectedSensor = sensorMetadata::find( $id );
+    public function deleteSensorMetadata(sensorGetParameterRequest $request, $id) {
+        $validatedData = $request->validated();
+        $selectedSensor = sensorMetadata::find( $validatedData["id"] );
 
         if($selectedSensor === null) {
             return array(
@@ -78,12 +76,8 @@ class MetadataController extends Controller {
         );
     }
 
-    public function batchUpdateSensorMetadata(Request $request) {
-        $validatedData = $this->validate($request, [
-            '*' => 'required|array',
-            '*.sensorId' => 'required|integer',
-            '*.sensorType' => 'max:255',
-        ])["*"];
+    public function batchUpdateSensorMetadata(MetadataBatchRequest $request) {
+        $validatedData = $request->validated();
 
         foreach($validatedData as $newSensorData) {
             $selectedSensor = sensorMetadata::find($newSensorData["sensorId"]);
