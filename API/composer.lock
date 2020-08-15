@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "87e473dedb09c022bf86cf9544cb18ee",
+    "content-hash": "6b6d349fe8f22f654010eaeb8ffada02",
     "packages": [
         {
             "name": "brick/math",
@@ -4170,41 +4170,6 @@
             "time": "2020-06-24T13:36:18+00:00"
         },
         {
-            "name": "urameshibr/lumen-form-request",
-            "version": "1.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/urameshibr/lumen-form-request.git",
-                "reference": "c540dbafed07fb71a6478478e8a4770ae7ff7105"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/urameshibr/lumen-form-request/zipball/c540dbafed07fb71a6478478e8a4770ae7ff7105",
-                "reference": "c540dbafed07fb71a6478478e8a4770ae7ff7105",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6.4"
-            },
-            "type": "project",
-            "autoload": {
-                "psr-4": {
-                    "Urameshibr\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Laravel Form Request adaptation for Lumen framework.",
-            "keywords": [
-                "form",
-                "lumen",
-                "request"
-            ],
-            "time": "2018-10-18T00:07:29+00:00"
-        },
-        {
             "name": "vlucas/phpdotenv",
             "version": "v4.1.8",
             "source": {
@@ -4740,16 +4705,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "5.2.0",
+            "version": "5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "3170448f5769fe19f456173d833734e0ff1b84df"
+                "reference": "d870572532cd70bc3fab58f2e23ad423c8404c44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/3170448f5769fe19f456173d833734e0ff1b84df",
-                "reference": "3170448f5769fe19f456173d833734e0ff1b84df",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/d870572532cd70bc3fab58f2e23ad423c8404c44",
+                "reference": "d870572532cd70bc3fab58f2e23ad423c8404c44",
                 "shasum": ""
             },
             "require": {
@@ -4788,7 +4753,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2020-07-20T20:05:34+00:00"
+            "time": "2020-08-15T11:14:08+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
