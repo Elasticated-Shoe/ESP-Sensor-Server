@@ -17,12 +17,12 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => 'sensors/metadata'], function () use ($router) {
+$router->group(['prefix' => 'sensors/metadata', 'middleware' => ['jwt.auth']], function () use ($router) {
     $router->put('new', 'MetadataController@createSensorMetadata');
     $router->post('id/{id}', 'MetadataController@updateSensorMetadata');
     $router->delete('id/{id}', 'MetadataController@deleteSensorMetadata');
 
-    $router->get('user/{user}', 'MetadataController@findByUser');
+    $router->get('', 'MetadataController@findByUser');
 });
 $router->group(['prefix' => 'sensors/data', 'middleware' => ['jwt.auth']], function () use ($router) {
     $router->put('', 'DataController@createReading');

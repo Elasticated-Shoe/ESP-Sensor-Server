@@ -9,8 +9,8 @@ use App\Http\Requests\PostSensorRequest;
 use App\Http\Requests\PutSensorRequest;
 
 class MetadataController extends Controller {
-    public function findByUser(Request $request, $user) {
-        return sensorMetadata::where("sensorOwner", $user)->get();
+    public function findByUser(Request $request) {
+        return sensorMetadata::where("sensorOwner", $this->credentials->sub)->get();
     }
 
     public function createSensorMetadata(PutSensorRequest $request) {
