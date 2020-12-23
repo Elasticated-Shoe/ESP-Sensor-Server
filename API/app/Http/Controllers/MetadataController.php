@@ -12,6 +12,9 @@ class MetadataController extends Controller {
     public function findByUser(Request $request) {
         return sensorMetadata::where("sensorOwner", $this->credentials->sub)->get();
     }
+    public function findUserPublic(Request $request, $user) {
+        return sensorMetadata::where("sensorOwner", $user)->where('sensorPublic', true)->get();
+    }
 
     public function createSensorMetadata(PutSensorRequest $request) {
         $validatedData = $request->validated();

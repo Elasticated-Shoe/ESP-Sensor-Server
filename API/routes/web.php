@@ -24,11 +24,21 @@ $router->group(['prefix' => 'sensors/metadata', 'middleware' => ['jwt.auth']], f
 
     $router->get('', 'MetadataController@findByUser');
 });
+
+$router->group(['prefix' => 'public/sensors/metadata/user/{user}'], function () use ($router) {
+    $router->get('', 'MetadataController@findUserPublic');
+});
+
 $router->group(['prefix' => 'sensors/data', 'middleware' => ['jwt.auth']], function () use ($router) {
     $router->put('', 'DataController@createReading');
     $router->put('batch', 'DataController@batchCreateReadings');
     $router->get('', 'DataController@getReadings');
 });
+
+$router->group(['prefix' => 'public/sensors/data'], function () use ($router) {
+    $router->get('', 'DataController@getPublicReadings');
+});
+
 $router->group(['prefix' => 'authenticate'], function () use ($router) {
     $router->post('', 'AuthController@getToken');
     $router->get('', ['uses' => 'AuthController@testToken', 'middleware' => 'jwt.auth']);
