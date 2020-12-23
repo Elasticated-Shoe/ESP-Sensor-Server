@@ -119,7 +119,17 @@ abstract class FormRequest extends Request implements ValidatesWhenResolved
 		$credentials = $token ? JWT::decode($token, env('JWT_SECRET'), ['HS256']) : false;
 
 		if(!$credentials) {
-			return true;
+            // check if requesting for public sensors
+            $allPublic = sensorMetaData::whereIn("sensorId", $requestedSensorArray)
+                                        ->where('sensorPublic', true)
+                                        ->get()->toArray();
+                     
+            $allPublicIdArray = array_column($allPublic, 'sensorId');
+            $nonPublicSensors = array_diff($requestedSensorArray, $allPublicIdArray);
+            if($nonPublicSensors) {
+                throw new AuthorizationException(implode(", ", $nonPublicSensors) . " Not Public Sensors");
+            }
+            return true;
 		}
 
 		$ownedSensors = sensorMetadata::where("sensorOwner", $credentials->sub)->get()->toArray();

@@ -17,21 +17,6 @@ class DataController extends Controller {
                         ->where('sensorDatetime', '<', $validatedData["end"])
                         ->get();
     }
-    public function getPublicReadings(GetDataRequest $request) {
-        $validatedData = $request->validated();
-        
-        $allSensorsMeta = sensorMetaData::whereIn("sensorId", $validatedData["id"])->get()->toArray();
-        $sensorIsPublicArray = array_column($allSensorsMeta, 'sensorPublic');
-        if(in_array(false, $sensorIsPublicArray)) {
-            return response()->json([
-                'error' => 'Attempt To Request Sensor That Is Not Public'
-            ], 400);
-        }
-        return sensorData::whereIn("sensorId", $validatedData["id"])
-                        ->where('sensorDatetime', '>', $validatedData["start"])
-                        ->where('sensorDatetime', '<', $validatedData["end"])
-                        ->get();
-    }
     public function createReading(PostDataRequest $request) {
         $validatedData = $request->validated();
 

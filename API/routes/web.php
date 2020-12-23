@@ -36,7 +36,7 @@ $router->group(['prefix' => 'sensors/data', 'middleware' => ['jwt.auth']], funct
 });
 
 $router->group(['prefix' => 'public/sensors/data'], function () use ($router) {
-    $router->get('', 'DataController@getPublicReadings');
+    $router->get('', 'DataController@getReadings');
 });
 
 $router->group(['prefix' => 'authenticate'], function () use ($router) {
