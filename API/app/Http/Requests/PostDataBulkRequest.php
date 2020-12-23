@@ -13,7 +13,9 @@ class PostDataBulkRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $ownedSensorIdArray = array_column($this->all(), 'sensorId');
+
+        return $this->AuthorizeIfOwned($ownedSensorIdArray);
     }
 
     /**

@@ -11,7 +11,7 @@ class GetDataRequest extends FormRequest
 		return array_merge(parent::all(), $this->route()[2]);
 	}
 	public function authorize() {
-		return true;
+		return $this->AuthorizeIfOwned($this->all()["id"]);
 	}
 
 	public function rules() {

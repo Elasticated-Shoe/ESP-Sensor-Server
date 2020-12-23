@@ -2,6 +2,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Http\Request;
+use Firebase\JWT\JWT;
+use App\sensorMetaData;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Validation\Validator;
@@ -110,6 +113,25 @@ abstract class FormRequest extends Request implements ValidatesWhenResolved
     protected function formatErrors(Validator $validator): JsonResponse
     {
         return new JsonResponse($validator->getMessageBag()->toArray(), 422);
+    }
+    protected function AuthorizeIfOwned($requestedSensorArray) {
+        $token = Request::bearerToken();
+		$credentials = $token ? JWT::decode($token, env('JWT_SECRET'), ['HS256']) : false;
+
+		if(!$credentials) {
+			return true;
+		}
+
+		$ownedSensors = sensorMetadata::where("sensorOwner", $credentials->sub)->get()->toArray();
+		$ownedSensorIdArray = array_column($ownedSensors, 'sensorId');
+		
+		$unownedSensors = array_diff($requestedSensorArray, $ownedSensorIdArray);
+		
+		if($unownedSensors) {
+			throw new AuthorizationException(implode(", ", $unownedSensors) . " Not Owned By You");
+        }
+        
+        return true;
     }
     /**
      * Get custom messages for validator errors.

@@ -13,7 +13,7 @@ class PostDataRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->AuthorizeIfOwned(array($this->all()["sensorId"]));
     }
 
     /**

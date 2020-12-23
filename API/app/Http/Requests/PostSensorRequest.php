@@ -8,7 +8,7 @@ class PostSensorRequest extends FormRequest
 {
 	public function authorize()
 	{
-		return true;
+		return $this->AuthorizeIfOwned(array($this->all()["sensorId"]));
 	}
 
 	public function rules()
