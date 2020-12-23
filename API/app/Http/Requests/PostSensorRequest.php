@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\FormRequest;
 
-class MetadataBatchRequest extends FormRequest
+class PostSensorRequest extends FormRequest
 {
 	public function authorize()
 	{
@@ -14,9 +14,9 @@ class MetadataBatchRequest extends FormRequest
 	public function rules()
 	{
 		return [
-            '*' => 'required|array',
-            '*.sensorId' => 'required|integer',
-            '*.sensorType' => 'max:255',
+			'sensorId' => 'required|integer',
+			'displayName' => 'max:255',
+            'sensorType' => 'max:255'
         ];
 	}
 }

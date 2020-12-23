@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\FormRequest;
 
-class MetadataCreateRequest extends FormRequest
+class PutSensorRequest extends FormRequest
 {
 	public function authorize()
 	{

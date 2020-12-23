@@ -22,23 +22,11 @@ $router->group(['prefix' => 'sensors/metadata'], function () use ($router) {
     $router->post('id/{id}', 'MetadataController@updateSensorMetadata');
     $router->delete('id/{id}', 'MetadataController@deleteSensorMetadata');
 
-    // accept array of updated
-    $router->post('', 'MetadataController@batchUpdateSensorMetadata');
-
-    // return array of matches
-    $router->get('', 'MetadataController@filterById');
     $router->get('user/{user}', 'MetadataController@findByUser');
-
-    // return single object
-    $router->get('id/{id}', 'MetadataController@findById');
 });
-$router->group(['prefix' => 'sensors'], function () use ($router) {
-    $router->put('id/{id}', 'DataController@createReading');
-    
-    // accept array to insert
-    $router->put('', 'DataController@batchCreateReadings');
-
-    // return readings meeting id and date range criteria
+$router->group(['prefix' => 'sensors/data', 'middleware' => ['jwt.auth']], function () use ($router) {
+    $router->put('', 'DataController@createReading');
+    $router->put('batch', 'DataController@batchCreateReadings');
     $router->get('', 'DataController@getReadings');
 });
 $router->group(['prefix' => 'authenticate'], function () use ($router) {

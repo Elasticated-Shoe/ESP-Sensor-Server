@@ -2,52 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\GetDataRequest;
+use App\Http\Requests\PostDataRequest;
+use App\Http\Requests\PostDataBulkRequest;
 use App\sensorData;
 use App\sensorMetaData;
-use Validator;
 
 class DataController extends Controller {
-    public function getReadings(Request $request) {
-        $idArray = $request->get("id");
-
-        $startFrom = date_create_from_format( 'Y-m-d-H:i:s', $request->get("start") );
-        $endAt = date_create_from_format( 'Y-m-d-H:i:s', $request->get("end") );
-
-        if($idArray === null || $startFrom === null || $endAt === null) {
-            return array(
-                "Message" => "Please Provide At Least One Sensor ID To Fetch Data For, A Start Date and A End Date"
-            );
-        }
+    public function getReadings(GetDataRequest $request) {
+        $validatedData = $request->validated();
         
-        return sensorData::whereIn("sensorId", $idArray)
-                        ->where('sensorDatetime', '>', $startFrom)
-                        ->where('sensorDatetime', '<', $endAt)
+        return sensorData::whereIn("sensorId", $validatedData["id"])
+                        ->where('sensorDatetime', '>', $validatedData["start"])
+                        ->where('sensorDatetime', '<', $validatedData["end"])
                         ->get();
     }
-    public function createReading(Request $request, $id) {
-        $validatedData = $this->validate($request, [
-            'sensorDatetime' => 'required|date',
-            'sensorValue' => 'required|numeric|between:0.00,999.99',
-        ]);
-
-        $data = ['id' => $id];
-        $validator = Validator::make($data, [
-            'id' => 'required|integer'
-        ]);
-
-        if ($validator->fails()) {
-            return $validator->errors();
-        }
+    public function createReading(PostDataRequest $request) {
+        $validatedData = $request->validated();
 
         $newReading = new sensorData();
         $newReadingData = $request->only($newReading->getFillable());
 
-        $newReadingData["sensorId"] = $id;
-
         $newReading->fill($newReadingData);
 
-        $selectedSensor = sensorMetadata::find($id);
+        $selectedSensor = sensorMetadata::find($validatedData["sensorId"]);
         $selectedSensor["lastSeen"] = $validatedData["sensorDatetime"];
         $selectedSensor["lastValue"] = $validatedData["sensorValue"];
         $selectedSensor->save();
@@ -58,13 +36,8 @@ class DataController extends Controller {
             "Message" => "Action Succesful"
         );
     }
-    public function batchCreateReadings(Request $request) {
-        $validatedData = $this->validate($request, [
-            '*' => 'required|array',
-            '*.sensorId' => 'required|integer',
-            '*.sensorDatetime' => 'required|date',
-            '*.sensorValue' => 'required|numeric|between:0.00,999.99'
-        ])["*"];
+    public function batchCreateReadings(PostDataBulkRequest $request) {
+        $validatedData = $request->validated();
 
         sensorData::insert($validatedData);
 
