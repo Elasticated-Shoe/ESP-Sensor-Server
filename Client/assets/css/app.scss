@@ -1,22 +1,45 @@
 .sensor-node {
-    border: 8px solid black;
     border-radius: 5px;
     padding: 0 !important;
 }
 
+.nav-bar {
+    background-color: black;
+}
+    .nav-main-bar span{
+        color: white;
+        font-weight: bold;
+    }
+    .nav-main-search {
+        border: 2px solid #73AD21;
+        border-radius: 25px;
+    }
+
+.sensor-container {
+    padding: 5px 10px !important;
+    margin: 5px 0;
+}
+
+.sensor-label {
+    padding: 0 1%;
+}
+    .sensor-label-text {
+        font-weight: bold;
+    }
+    .sensor-row {
+        padding: 0 1%;
+    }
+
 .sensor-reading {
     cursor: pointer;
+    margin: 5px;
 }
-    .sensor-reading div {
-        height: 55px;
-        margin: 5px;
+    .active {
+        background-color: green;
     }
-        .active div{
-            background-color: green;
-        }
-        .inactive div{
-            background-color: red;
-        }
-        .sensor-reading div span {
-            word-wrap: break-word;
-        }
+    .inactive {
+        background-color: red;
+    }
+    .sensor-reading {
+        word-wrap: break-word;
+    }

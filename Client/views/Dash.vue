@@ -1,16 +1,10 @@
 <template>
 	<v-app>
-		<NodeTree :node="sortedIndex">
+		<NodeTree :node="sortedIndex" :refreshDateTime="lastFetched">
 			<template v-slot:header="scope">
-				<v-container>
-					<v-row>
-						<v-col align-self="center" :class="'col-3 pa-0 sensor-reading ' + sensor.state" v-for="(sensor, index) in scope.node" :key="'main-' + sensor + '-' + index">
-							<div>
-								<span>{{ sensor.displayName }} = {{ sensor.lastValue }}</span>
-							</div>
-						</v-col>
-					</v-row>
-				</v-container>
+				<v-col :class="'col-1 pa-0 sensor-reading ' + sensor.state" v-for="(sensor, index) in scope.node" :key="'main-' + sensor + '-' + index">
+					{{ sensor.displayName }} = {{ sensor.lastValue }}
+				</v-col>
 			</template>
 		</NodeTree>
 
@@ -30,6 +24,7 @@
 			NodeTree
 		},
 		data: () => ({
+			lastFetched: null,
 			sortByDefault: ["sensorLocation", "sensorType"],
 			sortBy: ["sensorLocation", "sensorType", "displayName"],
 			sortedIndex: {}
@@ -55,7 +50,7 @@
 			indexBy(dataObj, keys) {
 				var indexedObjs = {};
 				dataObj.forEach((objVal, objIndex) => {
-					this.treeMe(indexedObjs, self.sortBy, objVal);
+					this.treeMe(indexedObjs, this.sortBy, objVal);
 				});
 				//v
 				return indexedObjs;
@@ -78,7 +73,10 @@
 						let currentTimestamp = Math.round(new Date().getTime()/1000) - config.inactivity,
 							sensorTimestamp = Math.round(new Date(sensorVal["lastSeen"].replace(" ", "T")).getTime()/1000);
 						response[sensorIndex]["state"] = sensorTimestamp >= currentTimestamp ? "active" : "inactive";
+
+						this.lastFetched = new Date();
 					});
+
 					this.sortedIndex = this.indexBy(response, this.sortBy);
 				});
 			},
