@@ -19,7 +19,7 @@
 </template>
 
 <script>
-	import {config} from "../Config";
+	import {config, demo} from "../Config";
 	import {api} from "../Services/api";
 	import NodeTree from "../components/dashOrder";
 	import FuzzySearch from "fuse.js"
@@ -53,10 +53,9 @@
 				this.treeMe(currentLevel[keyValue], remainingLevels.slice(1), levelValue);
 			},
 			indexBy(dataObj, keys) {
-				var self = this,
-					indexedObjs = {};
+				var indexedObjs = {};
 				dataObj.forEach((objVal, objIndex) => {
-					self.treeMe(indexedObjs, self.sortBy, objVal);
+					this.treeMe(indexedObjs, self.sortBy, objVal);
 				});
 				//v
 				return indexedObjs;
@@ -71,16 +70,16 @@
 				return timeStamp;
 			},
 			getMeta() {
-				var self = this;
+				const readMeta = demo.Enabled 	? config.apiBaseUrl + "/public/sensors/metadata/user/" + demo.UserId 
+													: config.apiBaseUrl + "/sensors/metadata/user/1";
 
-				const readMeta = config.apiBaseUrl + "/sensors/metadata/user/1";
-
-				api({method: "GET", url: readMeta}).then(function(response) {
+				api({method: "GET", url: readMeta}).then((response) => {
 					response.forEach((sensorVal, sensorIndex) => {
-						let currentTimestamp = Math.round(new Date().getTime()/1000) - config.inactivity;
-						response[sensorIndex]["state"] = sensorVal["lastSeen"] >= currentTimestamp ? "active" : "inactive";
+						let currentTimestamp = Math.round(new Date().getTime()/1000) - config.inactivity,
+							sensorTimestamp = Math.round(new Date(sensorVal["lastSeen"].replace(" ", "T")).getTime()/1000);
+						response[sensorIndex]["state"] = sensorTimestamp >= currentTimestamp ? "active" : "inactive";
 					});
-					self.sortedIndex = self.indexBy(response, self.sortBy);
+					this.sortedIndex = this.indexBy(response, this.sortBy);
 				});
 			},
 		},

@@ -1,7 +1,9 @@
 export const config = {
-    apiBaseUrl: "http://localhost:8000",
+    apiBaseUrl: "http://localhost:5000",
     inactivity: 60,
-    refresh: 10,
-    demo: true,
-    demoDevices: [1, 3, 5]
+    refresh: 10
+}
+export const demo = {
+    Enabled: true,
+    UserId: 1
 }
